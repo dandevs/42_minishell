@@ -24,8 +24,12 @@ SRC_PARSE_DIR = parsing/
 SRC_PARSE_FILES = parse.c $(SRC_AST) $(SRC_TOKENS)
 SRC_PARSE = $(foreach F,$(SRC_PARSE_FILES),$(SRC_PARSE_DIR)$F)
 
+SRC_INTERPRETOR_DIR = interpreter/
+SRC_INTERPRETOR_FILES = interpreter.c
+SRC_INTERPRETOR = $(foreach F,$(SRC_INTERPRETOR_FILES),$(SRC_INTERPRETOR_DIR)$F)
+
 SRC_DIR = src/
-SRC_FILES = main.c get_line.c setup.c signals.c test.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) 
+SRC_FILES = main.c get_line.c setup.c signals.c test.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR)
 SRC = $(foreach F,$(SRC_FILES),$(SRC_DIR)$F)
 
 OBJ = $(SRC:.c=.o)
