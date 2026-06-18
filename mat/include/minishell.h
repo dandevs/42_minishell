@@ -92,6 +92,20 @@ typedef struct s_shell
 	char		*last_line;
 }	t_shell;
 
+typedef struct s_interpreter_result
+{
+	int	exit_status;
+	int	signal;
+}	t_interpreter_result;
+
+typedef struct s_interpreter_context
+{
+	int	is_root;
+	int	non_blocking;
+	int	pipe_fd[2];
+	int	pid;
+}	t_interpreter_context;
+
 void		setup(int agc, char **agv, char **envp, t_shell *shell);
 int			check_signal(t_shell *shell, int sig);
 void		setup_signals(t_shell *shell);
@@ -126,6 +140,8 @@ int 		mode_change(t_mode *mode, char *word, int i);
 void		print_tokens(t_shell *shell);
 void		print_ast(t_ast *ast);
 void		print_envp(char **envp);
+
+t_interpreter_result	interpret(t_ast *ast, t_interpreter_context context);
 
 #endif
 

@@ -43,7 +43,9 @@ int	main(int agc, char **agv, char **envp)
 			continue ;
 		}
 		print_ast(shell.ast);
-		//interpretor(shell.ast);
+		shell.last_status = interpret(shell.ast,
+				(t_interpreter_context){.pipe_fd = {-1, -1}, .is_root = 1}
+				).exit_status;
 		cleanup_loop(&shell);
 	}
 }
