@@ -1,0 +1,26 @@
+# Compiled files
+*.o
+*.a
+*.so
+
+# Executables
+/minishell
+/shell
+
+# Build artifacts
+*.dSYM/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test build folder
+test_build/
+objects/
