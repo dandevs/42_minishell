@@ -6,7 +6,7 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/20 07:25:45 by danimend         ###   ########.fr       */
+/*   Updated: 2026/06/21 00:32:33 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
 			close(fd_write);
 		}
 
-		execve(cmd->args[0], cmd->args, NULL);
+		execve(cmd->start->lexeme, build_argv(cmd->start->next, cmd->end), NULL);
 		exit(127);
 	} 
 	
@@ -99,7 +99,7 @@ static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
 		close(fd_write);
 }
 
-static int	traverse(const t_ast *ast, t_interpreter_context *ctx)
+static int	traverse(t_ast *ast, t_interpreter_context *ctx)
 {
 	int	fd[2];
 
@@ -116,20 +116,23 @@ static int	traverse(const t_ast *ast, t_interpreter_context *ctx)
 		}
 	}
 
-	if (ast->left != NULL && ast->left->ast_type == AST_PIPE)
+	if (ast->left != NULL && ast->ast_type == AST_PIPE)
 		traverse(ast->left, ctx);
 
-	if (ast->right != NULL && ast->right->ast_type == AST_PIPE)
+	if (ast->right != NULL && ast->ast_type == AST_PIPE)
 		traverse(ast->right, ctx);
 
 	if (ast->ast_type == AST_CMD)
 		run_cmd(ast, ctx);
+
+	return (1);
 }
 
 t_interpreter_result	interpret(t_ast *ast)
 {
 	t_interpreter_context	context;
 	t_interpreter_result	result;
+	context.fd_len = 0;
 	context.fd_arr[context.fd_len++] = STDOUT_FILENO;
 	traverse(ast, &context);
 
