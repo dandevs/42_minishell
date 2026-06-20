@@ -78,8 +78,8 @@ typedef struct	s_ast
 	t_ast_type		ast_type;
 	char			**args;
 	t_redirs		**redirs;
-	t_ast			*right;
 	t_ast			*left;
+	t_ast			*right;
 }	t_ast;
 
 typedef struct s_shell
@@ -100,10 +100,10 @@ typedef struct s_interpreter_result
 
 typedef struct s_interpreter_context
 {
-	int	is_root;
-	int	non_blocking;
-	int	pipe_fd[2];
-	int	pid;
+	int		pid_arr[256];
+	int		pid_len;
+	int		fd_arr[512];
+	int		fd_len;
 }	t_interpreter_context;
 
 void		setup(int agc, char **agv, char **envp, t_shell *shell);
@@ -141,7 +141,7 @@ void		print_tokens(t_shell *shell);
 void		print_ast(t_ast *ast);
 void		print_envp(char **envp);
 
-t_interpreter_result	interpret(t_ast *ast, t_interpreter_context context);
+t_interpreter_result	interpret(t_ast *ast);
 
 #endif
 
