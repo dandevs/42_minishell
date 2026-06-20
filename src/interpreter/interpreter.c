@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   interpreter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/20 23:55:08 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/21 01:20:57 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// /bin/ls -l -a | /bin/grep lib
 #include "minishell.h"
 #include <sys/wait.h>
 
@@ -61,15 +62,20 @@ static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
 	int	fd_read;
 	int	fd_write;
 
+	// printf("fd: ");
+	// for (int i = 0; i < ctx->fd_len; i++)
+	// 	printf("%d, ", ctx->fd_arr[i]);
+	// printf("\n");
+
 	if (ctx->fd_len >= 2)
 	{
-		fd_write = ctx->fd_arr[ctx->fd_len--];
-		fd_read = ctx->fd_arr[ctx->fd_len--];
+		fd_read = ctx->fd_arr[--ctx->fd_len];
+		fd_write = ctx->fd_arr[--ctx->fd_len];
 	}
 	else
 	{
-		fd_write = STDOUT_FILENO;
 		fd_read = STDIN_FILENO;
+		fd_write = STDOUT_FILENO;
 	}
 
 	pid = fork();
@@ -134,6 +140,7 @@ t_interpreter_result	interpret(t_ast *ast)
 	t_interpreter_context	context;
 	t_interpreter_result	result;
 	context.fd_len = 0;
+	context.pid_len = 0;
 	context.fd_arr[context.fd_len++] = STDOUT_FILENO;
 	traverse(ast, &context);
 
