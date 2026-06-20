@@ -6,7 +6,7 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/21 00:32:33 by danimend         ###   ########.fr       */
+/*   Updated: 2026/06/21 00:48:52 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
 			close(fd_write);
 		}
 
-		execve(cmd->start->lexeme, build_argv(cmd->start->next, cmd->end), NULL);
+		execve(cmd->start->lexeme, build_argv(cmd->start, cmd->end), NULL);
 		exit(127);
 	} 
 	
