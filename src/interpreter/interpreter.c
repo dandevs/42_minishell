@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpreter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/21 00:48:52 by danimend         ###   ########.fr       */
+/*   Updated: 2026/06/20 23:55:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	**build_argv(t_tokens *start, t_tokens *end)
 
 	argv = malloc(sizeof(char *) * (count_argv(start, end) + 1));
 	i = 0;
-	
+
 	if (!argv)
 		return (NULL);
 
@@ -73,6 +73,7 @@ static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
 	}
 
 	pid = fork();
+	ctx->pid_len = 0;
 	ctx->pid_arr[ctx->pid_len++] = pid;
 
 	if (pid == 0)
@@ -91,8 +92,8 @@ static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
 
 		execve(cmd->start->lexeme, build_argv(cmd->start, cmd->end), NULL);
 		exit(127);
-	} 
-	
+	}
+
 	if (fd_read != STDIN_FILENO)
 		close(fd_read);
 	if (fd_write != STDOUT_FILENO)
@@ -143,7 +144,7 @@ t_interpreter_result	interpret(t_ast *ast)
 
 		pid = context.pid_arr[--context.pid_len];
 		waitpid(pid, &status, 0);
-		
+
 		if (WIFSIGNALED(status))
 		{
 			return (t_interpreter_result)
