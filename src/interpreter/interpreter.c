@@ -6,12 +6,14 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/21 01:20:57 by danimend         ###   ########.fr       */
+/*   Updated: 2026/06/22 18:25:09 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// /bin/ls -l -a | /bin/grep lib
+// /bin/ls -l -a | /bin/grep lib | /bin/wc -l
+// /bin/ls -l -a | /bin/grep lib | /bin/wc -l
 #include "minishell.h"
+#include <fcntl.h>
 #include <sys/wait.h>
 
 static int	is_redir(t_token t)
@@ -56,30 +58,11 @@ static char	**build_argv(t_tokens *start, t_tokens *end)
 	return (argv);
 }
 
-static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
+static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context *ctx)
 {
 	int	pid;
-	int	fd_read;
-	int	fd_write;
-
-	// printf("fd: ");
-	// for (int i = 0; i < ctx->fd_len; i++)
-	// 	printf("%d, ", ctx->fd_arr[i]);
-	// printf("\n");
-
-	if (ctx->fd_len >= 2)
-	{
-		fd_read = ctx->fd_arr[--ctx->fd_len];
-		fd_write = ctx->fd_arr[--ctx->fd_len];
-	}
-	else
-	{
-		fd_read = STDIN_FILENO;
-		fd_write = STDOUT_FILENO;
-	}
 
 	pid = fork();
-	ctx->pid_len = 0;
 	ctx->pid_arr[ctx->pid_len++] = pid;
 
 	if (pid == 0)
@@ -96,42 +79,41 @@ static void	run_cmd(t_ast *cmd, t_interpreter_context *ctx)
 			close(fd_write);
 		}
 
+		for (int i_fd = 3; i_fd < 512; i_fd++)
+			close(i_fd);
+
 		execve(cmd->start->lexeme, build_argv(cmd->start, cmd->end), NULL);
 		exit(127);
 	}
-
-	if (fd_read != STDIN_FILENO)
-		close(fd_read);
-	if (fd_write != STDOUT_FILENO)
-		close(fd_write);
 }
 
-static int	traverse(t_ast *ast, t_interpreter_context *ctx)
+static int	traverse(t_ast *ast, int fd_read, int fd_write, t_interpreter_context *ctx)
 {
 	int	fd[2];
 
 	if (ast->ast_type == AST_PIPE)
 	{
 		pipe(fd);
-		ctx->fd_arr[ctx->fd_len++] = fd[0];
-		ctx->fd_arr[ctx->fd_len++] = fd[1];
+		// printf("pipe created: [%d, %d]\n", fd[0], fd[1]);
 
-		if (ast->left != NULL && ast->right != NULL)
-		{
-			if (ast->left->ast_type == AST_CMD && ast->right->ast_type == AST_CMD)
-				ctx->fd_arr[ctx->fd_len++] = STDIN_FILENO;
-		}
+		if (ast->left != NULL)
+			traverse(ast->left, fd_read, fd[1], ctx);
+		
+		if (ast->right != NULL)
+			traverse(ast->right, fd[0], fd_write, ctx);
+		
+		if (fd[0] != STDIN_FILENO)
+			close(fd[0]);
+
+		if (fd[1] != STDOUT_FILENO)
+			close(fd[1]);
 	}
-
-	if (ast->left != NULL && ast->ast_type == AST_PIPE)
-		traverse(ast->left, ctx);
-
-	if (ast->right != NULL && ast->ast_type == AST_PIPE)
-		traverse(ast->right, ctx);
-
-	if (ast->ast_type == AST_CMD)
-		run_cmd(ast, ctx);
-
+	else if (ast->ast_type == AST_CMD)
+	{
+		// printf("yep: %s, %d | %d\n", ast->start->lexeme, fd_read, fd_write);
+		run_cmd(ast, fd_read, fd_write, ctx);
+	}
+	 
 	return (1);
 }
 
@@ -139,10 +121,8 @@ t_interpreter_result	interpret(t_ast *ast)
 {
 	t_interpreter_context	context;
 	t_interpreter_result	result;
-	context.fd_len = 0;
 	context.pid_len = 0;
-	context.fd_arr[context.fd_len++] = STDOUT_FILENO;
-	traverse(ast, &context);
+	traverse(ast, STDIN_FILENO, STDOUT_FILENO, &context);
 
 	while (context.pid_len > 0)
 	{

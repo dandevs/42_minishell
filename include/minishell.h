@@ -102,8 +102,6 @@ typedef struct s_interpreter_context
 {
 	int		pid_arr[256];
 	int		pid_len;
-	int		fd_arr[512];
-	int		fd_len;
 }	t_interpreter_context;
 
 void		setup(int agc, char **agv, char **envp, t_shell *shell);
