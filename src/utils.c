@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 22:19:19 by mat               #+#    #+#             */
-/*   Updated: 2026/06/22 21:06:02 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/22 23:32:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*envp_value(char *name, char **envp)
 	i = 0;
 	while (envp && envp[i] && name && *name)
 	{
-		if (ft_strncmp(envp[i], name, ft_strlen(name)) == 0)
+		if (ft_strncmp(envp[i], name, ft_strlen(name)) == 0 && envp[i][ft_strlen(name)] == '=')
 			return (envp[i] + ft_strlen(name) + 1);
 		i++;
 	}
