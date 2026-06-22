@@ -63,7 +63,7 @@ int	get_redirs(t_ast **ast, t_tokens *start, t_tokens *end)
 	{
 		if (start->token != WORD && start->token != PIPE)
 		{
-			(*ast)->redirs[i] = malloc(sizeof(t_redirs));
+			(*ast)->redirs[i] = calloc(1, sizeof(t_redirs));
 			if (!(*ast)->redirs[i])
 				return (get_redirs_fail(ast, (*ast)->redirs, i));
 			(*ast)->redirs[i]->tokens = start;
