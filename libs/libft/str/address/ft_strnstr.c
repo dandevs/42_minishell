@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mavallee <mavallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 10:38:35 by mavallee          #+#    #+#             */
-/*   Updated: 2024/06/01 17:41:35 by mavallee         ###   ########.fr       */
+/*   Updated: 2026/06/22 20:59:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	while (big[i] && (i + to_compare <= len) && (i
 			+ to_compare >= ft_strlen(little)))
 	{
-		if (!ft_strncmp((char *)(big + i), little, to_compare))
+		if (ft_strncmp((char *)(big + i), little, to_compare) == 0)
 			return (&(((char *)big)[i]));
 		i++;
 	}

@@ -28,8 +28,12 @@ SRC_INTERPRETOR_DIR = interpreter/
 SRC_INTERPRETOR_FILES = interpreter.c
 SRC_INTERPRETOR = $(foreach F,$(SRC_INTERPRETOR_FILES),$(SRC_INTERPRETOR_DIR)$F)
 
+SRC_EXPAND_DIR = expand/
+SRC_EXPAND_FILES = expand_node.c expand_recursive.c
+SRC_EXPAND = $(foreach F,$(SRC_EXPAND_FILES),$(SRC_EXPAND_DIR)$F)
+
 SRC_DIR = src/
-SRC_FILES = main.c get_line.c setup.c signals.c test.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR)
+SRC_FILES = main.c get_line.c setup.c signals.c test.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR) $(SRC_EXPAND)
 SRC = $(foreach F,$(SRC_FILES),$(SRC_DIR)$F)
 
 OBJ = $(SRC:.c=.o)

@@ -123,8 +123,9 @@ int			get_redirs(t_ast **ast, t_tokens *start, t_tokens *end);
 int			count_redirs(t_tokens *start, t_tokens *end);
 int			count_args(t_tokens *start, t_tokens *end);
 
-int 		resolve_hd_recursive(t_ast *ast);
-int 		expand_recursive(t_ast *ast);
+int			resolve_hd_recursive(t_ast *ast);
+int			expand_recursive(t_ast *ast, char **envp);
+int			expand_node(t_ast *ast, char **envp);
 
 void		cleanup_and_exit(t_shell *shell, char *msg, int fd, int status);
 void		cleanup_loop(t_shell *shell);
@@ -134,6 +135,7 @@ void		free_ast(t_ast *ast);
 void		cleanup_ast(t_shell *shell);
 
 int 		mode_change(t_mode *mode, char *word, int i);
+char		*envp_value(char *name, char **envp);
 
 void		print_tokens(t_shell *shell);
 void		print_ast(t_ast *ast);

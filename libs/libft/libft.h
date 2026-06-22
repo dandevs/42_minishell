@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mat <mat@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 08:08:00 by mavallee          #+#    #+#             */
-/*   Updated: 2026/06/15 23:18:00 by mat              ###   ########.fr       */
+/*   Updated: 2026/06/22 20:23:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,6 @@ int					ft_issign(int c);
 int 				ptrptr_count(void **tab);
 int 				ptrptr_free(void **tab);
 int 				ft_lstsplit(t_list *lst, int i);
+char				*str_replace(char *str, char *old, char *new);
 
 #endif

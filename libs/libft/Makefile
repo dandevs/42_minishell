@@ -38,7 +38,7 @@ SRC_STR_VOID_FILES = ft_striteri.c
 SRC_STR_VOID = $(foreach F,$(SRC_STR_VOID_FILES),$(SRC_STR_VOID_DIR)$F)
 
 SRC_STR_MALLOC_DIR = malloc/
-SRC_STR_MALLOC_FILES = ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c ft_strmapi.c
+SRC_STR_MALLOC_FILES = ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c ft_strmapi.c str_replace.c
 SRC_STR_MALLOC = $(foreach F,$(SRC_STR_MALLOC_FILES),$(SRC_STR_MALLOC_DIR)$F)
 
 SRC_STR_DIR = str/

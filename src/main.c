@@ -37,12 +37,13 @@ int	main(int agc, char **agv, char **envp)
 			cleanup_loop(&shell);
 			continue ;
 		}
-		if (!resolve_hd_recursive(shell.ast)) //!expand_recursive(shell.ast)
+		if (!resolve_hd_recursive(shell.ast) || !expand_recursive(shell.ast, shell.envp))
 		{
 			cleanup_loop(&shell);
 			continue ;
 		}
-		print_ast(shell.ast);
+		print_tokens(&shell);
+		//print_ast(shell.ast);
 		shell.last_status = interpret(shell.ast).exit_status;
 		cleanup_loop(&shell);
 	}
