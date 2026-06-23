@@ -124,8 +124,12 @@ int			count_redirs(t_tokens *start, t_tokens *end);
 int			count_args(t_tokens *start, t_tokens *end);
 
 int			resolve_hd_recursive(t_ast *ast);
-int 		args_expand_recursive(t_ast *ast, char **envp);
-int			expand_node(t_ast *ast, char **envp);
+
+int			build_args_recursive(t_ast *ast, char **envp);
+int			expand(t_ast *ast, char **envp);
+int			tokens_to_lst(t_list **lst, t_tokens *start, t_tokens *end);
+int			finalize_lst(t_list **lst);
+int			lst_to_args(t_list *lst, t_ast *ast);
 
 void		cleanup_and_exit(t_shell *shell, char *msg, int fd, int status);
 void		cleanup_loop(t_shell *shell);
@@ -140,7 +144,9 @@ char		*envp_value(char *name, char **envp);
 void		print_tokens(t_shell *shell);
 void		print_ast(t_ast *ast);
 void		print_envp(char **envp);
-void		print_redirs(t_redirs **redirs);
+void		print_redirs(t_ast *ast);
+void		print_lst(t_list *lst);
+void		print_args(t_ast *ast);
 
 t_interpreter_result	interpret(t_ast *ast);
 

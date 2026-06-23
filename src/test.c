@@ -86,19 +86,26 @@ void	print_cmd(char **args, t_redirs **redirs)
 	printf("\n");
 }
 
-void	print_redirs(t_redirs **redirs)
+void	print_redirs(t_ast *ast)
 {
-	int	i;
+	int			i;
 
 	i = 0;
-	while (redirs[i])
+	if (ast->ast_type == AST_PIPE)
 	{
-		if (redirs[i]->delimiter)
-			printf("del: %s ", redirs[i]->delimiter);
-		if (redirs[i]->hd)
-			printf("hd: %s ", redirs[i]->hd);
-		if (redirs[i]->file)
-			printf("file: %s ", redirs[i]->file->lexeme);
+		print_redirs(ast->left);
+		print_redirs(ast->right);
+		return ;
+	}
+	while (ast->redirs && ast->redirs[i])
+	{
+		printf("redir type: %s ", ast->redirs[i]->tokens->lexeme);
+		if (ast->redirs[i]->delimiter)
+			printf("del: %s ", ast->redirs[i]->delimiter);
+		if (ast->redirs[i]->hd)
+			printf("hd: %s ", ast->redirs[i]->hd);
+		if (ast->redirs[i]->file)
+			printf("file: %s ", ast->redirs[i]->file->lexeme);
 		printf("\n");
 		i++;
 	}
@@ -136,4 +143,30 @@ void	print_envp(char **envp)
 		printf("%s\n", envp[i]);
 		i++;
 	}
+}
+
+void	print_lst(t_list *lst)
+{
+	while (lst)
+	{
+		printf("%s\n", (char *)lst->content);
+		lst = lst->next;
+	}
+}
+
+void	print_args(t_ast *ast)
+{
+	if (ast->ast_type == AST_PIPE)
+	{
+		print_args(ast->left);
+		print_args(ast->right);
+		return ;
+	}
+	int i = 0;
+	while (ast->args[i])
+	{
+		printf("arg[%i]:%s,", i, ast->args[i]);
+		i++;
+	}
+	printf("\n");
 }

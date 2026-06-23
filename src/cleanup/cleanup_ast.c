@@ -30,6 +30,19 @@ void	free_redirs(t_redirs **redirs)
 		free(redirs);
 }
 
+void	free_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
+}
+
 void	free_ast(t_ast *ast)
 {
 	if (ast)
@@ -44,7 +57,7 @@ void	free_ast(t_ast *ast)
 		if (ast->ast_type == AST_CMD)
 		{
 			if (ast->args)
-				free(ast->args);
+				free_args(ast->args);
 			if (ast->redirs)
 				free_redirs(ast->redirs);
 		}

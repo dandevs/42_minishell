@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_node.c                                      :+:      :+:    :+:   */
+/*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 22:08:18 by mat               #+#    #+#             */
-/*   Updated: 2026/06/23 01:33:04 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/23 22:02:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,19 @@ int	check_expand_string(char **str, int hd, char **envp)
 	return (1);
 }
 
-int	expand_node_tokens(t_tokens *start, t_tokens *end, char **envp)
+int	expand_tokens(t_tokens *start, t_tokens *end, char **envp)
 {
+	int	redir_file;
+
+	redir_file = 0;
 	while (start != end && start)
 	{
-		if (start->token != WORD)
+		if (start->token != WORD || redir_file == 1)
 		{
+			if (redir_file == 1)
+				redir_file = 0;
+			else if (start->token != PIPE && redir_file == 0)
+				redir_file = 1;
 			start = start->next;
 			continue ;
 		}
@@ -98,7 +105,7 @@ int	expand_node_tokens(t_tokens *start, t_tokens *end, char **envp)
 	return (1);
 }
 
-int	expand_node_redirs(t_redirs	**redirs, char **envp)
+int	expand_redirs(t_redirs	**redirs, char **envp)
 {
 	int		i;
 	int		j;
@@ -126,11 +133,11 @@ int	expand_node_redirs(t_redirs	**redirs, char **envp)
 	return (1);
 }
 
-int	expand_node(t_ast *ast, char **envp)
+int	expand(t_ast *ast, char **envp)
 {
-	if (!expand_node_tokens(ast->start, ast->end, envp))
+	if (!expand_redirs(ast->redirs, envp))
 		return (0);
-	if (!expand_node_redirs(ast->redirs, envp))
+	if (!expand_tokens(ast->start, ast->end, envp))
 		return (0);
 	return (1);
 }
