@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   resolve_hd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mat <mat@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 01:58:31 by mat               #+#    #+#             */
-/*   Updated: 2026/06/15 22:22:10 by mat              ###   ########.fr       */
+/*   Updated: 2026/06/22 23:15:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int resolve_hd_recursive(t_ast *ast)
                 return (0);
             if (!get_hd_body(ast->redirs[i]))
                 return (0);
+			ast->redirs[i]->file = NULL;
         }
         i++;
     }

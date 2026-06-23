@@ -86,6 +86,24 @@ void	print_cmd(char **args, t_redirs **redirs)
 	printf("\n");
 }
 
+void	print_redirs(t_redirs **redirs)
+{
+	int	i;
+
+	i = 0;
+	while (redirs[i])
+	{
+		if (redirs[i]->delimiter)
+			printf("del: %s ", redirs[i]->delimiter);
+		if (redirs[i]->hd)
+			printf("hd: %s ", redirs[i]->hd);
+		if (redirs[i]->file)
+			printf("file: %s ", redirs[i]->file->lexeme);
+		printf("\n");
+		i++;
+	}
+}
+
 void	print_ast(t_ast *ast)
 {
 	char	*type;

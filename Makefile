@@ -28,8 +28,8 @@ SRC_INTERPRETOR_DIR = interpreter/
 SRC_INTERPRETOR_FILES = interpreter.c
 SRC_INTERPRETOR = $(foreach F,$(SRC_INTERPRETOR_FILES),$(SRC_INTERPRETOR_DIR)$F)
 
-SRC_EXPAND_DIR = expand/
-SRC_EXPAND_FILES = expand_node.c expand_recursive.c
+SRC_EXPAND_DIR = args_expand/
+SRC_EXPAND_FILES = expand_node.c args_expand_recursive.c
 SRC_EXPAND = $(foreach F,$(SRC_EXPAND_FILES),$(SRC_EXPAND_DIR)$F)
 
 SRC_DIR = src/
