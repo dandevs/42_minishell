@@ -125,8 +125,9 @@ int			count_args(t_tokens *start, t_tokens *end);
 
 int			resolve_hd_recursive(t_ast *ast);
 
-int			build_args_recursive(t_ast *ast, char **envp);
-int			expand(t_ast *ast, char **envp);
+int			build_args_recursive(t_ast *ast, int last_status, char **envp);
+int			expand(t_ast *ast, int last_stat, char **envp);
+int			check_expand_string(char **str, int hd, char *last_status, char **envp);
 int			tokens_to_lst(t_list **lst, t_tokens *start, t_tokens *end);
 int			finalize_lst(t_list **lst);
 int			lst_to_args(t_list *lst, t_ast *ast);
@@ -139,7 +140,7 @@ void		free_ast(t_ast *ast);
 void		cleanup_ast(t_shell *shell);
 
 int 		mode_change(t_mode *mode, char *word, int i);
-char		*envp_value(char *name, char **envp);
+char		*envp_value(char *name, char *last_status, char **envp);
 
 void		print_tokens(t_shell *shell);
 void		print_ast(t_ast *ast);

@@ -29,7 +29,7 @@ SRC_INTERPRETOR_FILES = interpreter.c
 SRC_INTERPRETOR = $(foreach F,$(SRC_INTERPRETOR_FILES),$(SRC_INTERPRETOR_DIR)$F)
 
 SRC_ARGS_DIR = build_args/
-SRC_ARGS_FILES = build_args.c steps/expand.c steps/tokens_to_lst.c steps/finalize_lst.c steps/lst_to_args.c
+SRC_ARGS_FILES = build_args.c steps/expand.c steps/tokens_to_lst.c steps/finalize_lst.c steps/lst_to_args.c steps/expand_utils.c
 SRC_ARGS = $(foreach F,$(SRC_ARGS_FILES),$(SRC_ARGS_DIR)$F)
 
 SRC_DIR = src/

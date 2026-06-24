@@ -37,7 +37,7 @@ int	main(int agc, char **agv, char **envp)
 			cleanup_loop(&shell);
 			continue ;
 		}
-		if (!resolve_hd_recursive(shell.ast) || !build_args_recursive(shell.ast, shell.envp))
+		if (!resolve_hd_recursive(shell.ast) || !build_args_recursive(shell.ast, shell.last_status, shell.envp))
 		{
 			cleanup_loop(&shell);
 			continue ;

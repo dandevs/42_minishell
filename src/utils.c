@@ -6,17 +6,19 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 22:19:19 by mat               #+#    #+#             */
-/*   Updated: 2026/06/22 23:32:56 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/25 01:00:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*envp_value(char *name, char **envp)
+char	*envp_value(char *name, char *last_status, char **envp)
 {
 	int	i;
 
 	i = 0;
+	if (name[0] == '?' && last_status)
+		return (last_status);
 	while (envp && envp[i] && name && *name)
 	{
 		if (ft_strncmp(envp[i], name, ft_strlen(name)) == 0 && envp[i][ft_strlen(name)] == '=')
