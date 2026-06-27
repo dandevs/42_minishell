@@ -33,20 +33,23 @@ int count_no_quotes(char *word)
 int get_hd_delimiter(t_redirs *redirs)
 {
     int     i;
+    int     j;
     t_mode  mode;
 
     i = count_no_quotes(redirs->file->lexeme);
     redirs->delimiter = malloc(sizeof(char) * (i + 1));
-    i = 0;
     if (!redirs->delimiter)
         return (0);
+    i = 0;
+    j = 0;
+    mode = NORMAL;
     while (redirs->file->lexeme[i])
     {
         if (!mode_change(&mode, redirs->file->lexeme, i))
-            redirs->delimiter[i] = redirs->file->lexeme[i];
+            redirs->delimiter[j++] = redirs->file->lexeme[i];
         i++;
     }
-    redirs->delimiter[i] = '\0';
+    redirs->delimiter[j] = '\0';
     return (1);
 }
 int	get_hd_body(t_redirs *redirs)
