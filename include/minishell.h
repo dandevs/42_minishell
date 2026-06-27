@@ -104,6 +104,8 @@ typedef struct s_interpreter_context
 	int		pid_len;
 }	t_interpreter_context;
 
+typedef int	(*t_redir_cb)(t_tokens *op, t_tokens *file);
+
 void		setup(int agc, char **agv, char **envp, t_shell *shell);
 int			check_signal(t_shell *shell, int sig);
 void		setup_signals(t_shell *shell);
