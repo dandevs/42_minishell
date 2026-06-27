@@ -6,7 +6,7 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/27 07:24:33 by danimend         ###   ########.fr       */
+/*   Updated: 2026/06/27 15:06:48 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,20 @@ static int	apply_one_redir(t_tokens *op, t_tokens *file)
 	return (1);
 }
 
-static int	process_redirs(t_ast *cmd, t_redir_cb cb)
+static int	apply_one_heredoc(char *hd)
+{
+	int	p[2];
+
+	if (pipe(p) < 0)
+		return (perror("minishell: heredoc"), 0);
+	write(p[1], hd, ft_strlen(hd));
+	close(p[1]);
+	dup2(p[0], STDIN_FILENO);
+	close(p[0]);
+	return (1);
+}
+
+static int	process_redirs(t_ast *cmd, t_redir_cb cb, t_heredoc_cb hd_cb)
 {
 	int		i;
 	t_redirs	*redir;
@@ -101,7 +114,12 @@ static int	process_redirs(t_ast *cmd, t_redir_cb cb)
 	while (cmd->redirs && cmd->redirs[i])
 	{
 		redir = cmd->redirs[i];
-		if (redir->file && !cb(redir->tokens, redir->file))
+		if (redir->tokens->token == DLESSER)
+		{
+			if (hd_cb && !hd_cb(redir->hd))
+				return (0);
+		}
+		else if (redir->file && !cb(redir->tokens, redir->file))
 			return (0);
 		i++;
 	}
@@ -129,7 +147,7 @@ static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context
 			close(fd_write);
 		}
 
-		if (!process_redirs(cmd, apply_one_redir))
+		if (!process_redirs(cmd, apply_one_redir, apply_one_heredoc))
 			exit(1);
 
 		for (int i_fd = 3; i_fd < 512; i_fd++)
