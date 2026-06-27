@@ -6,7 +6,7 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/22 18:25:09 by danimend         ###   ########.fr       */
+/*   Updated: 2026/06/27 07:24:33 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,29 @@ static int	is_redir(t_token t)
 	return (t == GREATER || t == DGREATER || t == LESSER || t == DLESSER);
 }
 
+static void	skip_redir_token_and_word(t_tokens **head)
+{
+	*head = (*head)->next;
+	if (*head)
+		*head = (*head)->next;
+}
+
 static int	count_argv(t_tokens *start, t_tokens *end)
 {
 	int	count;
-	count = 0;
 
-	while (start && start != end && !is_redir(start->token))
+	count = 0;
+	while (start && start != end)
 	{
+		if (is_redir(start->token))
+		{
+			skip_redir_token_and_word(&start);
+			continue ;
+		}
 		if (start->token == WORD)
 			count++;
-
 		start = start->next;
 	}
-
 	return (count);
 }
 
@@ -43,19 +53,59 @@ static char	**build_argv(t_tokens *start, t_tokens *end)
 	int		i;
 
 	argv = malloc(sizeof(char *) * (count_argv(start, end) + 1));
-	i = 0;
-
 	if (!argv)
 		return (NULL);
-
+	i = 0;
 	while (start && start != end)
 	{
-		argv[i++] = start->lexeme;
+		if (is_redir(start->token))
+		{
+			skip_redir_token_and_word(&start);
+			continue ;
+		}
+		if (start->token == WORD)
+			argv[i++] = start->lexeme;
 		start = start->next;
 	}
-
 	argv[i] = NULL;
 	return (argv);
+}
+
+static int	apply_one_redir(t_tokens *op, t_tokens *file)
+{
+	int	fd;
+	int	target;
+
+	if (op->token == GREATER)
+		fd = open(file->lexeme, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (op->token == DGREATER)
+		fd = open(file->lexeme, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (op->token == LESSER)
+		fd = open(file->lexeme, O_RDONLY);
+	else
+		return (1);
+	if (fd < 0)
+		return (perror(file->lexeme), 0);
+	target = (op->token == LESSER) ? STDIN_FILENO : STDOUT_FILENO;
+	dup2(fd, target);
+	close(fd);
+	return (1);
+}
+
+static int	process_redirs(t_ast *cmd, t_redir_cb cb)
+{
+	int		i;
+	t_redirs	*redir;
+
+	i = 0;
+	while (cmd->redirs && cmd->redirs[i])
+	{
+		redir = cmd->redirs[i];
+		if (redir->file && !cb(redir->tokens, redir->file))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context *ctx)
@@ -78,6 +128,9 @@ static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context
 			dup2(fd_write, STDOUT_FILENO);
 			close(fd_write);
 		}
+
+		if (!process_redirs(cmd, apply_one_redir))
+			exit(1);
 
 		for (int i_fd = 3; i_fd < 512; i_fd++)
 			close(i_fd);
