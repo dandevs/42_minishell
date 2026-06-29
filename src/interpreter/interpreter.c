@@ -6,13 +6,14 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/27 15:06:48 by danimend         ###   ########.fr       */
+/*   Updated: 2026/06/29 18:22:03 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // /bin/ls -l -a | /bin/grep lib | /bin/wc -l
 // /bin/ls -l -a | /bin/grep lib | /bin/wc -l
 #include "minishell.h"
+#include "builtins.h"
 #include <fcntl.h>
 #include <sys/wait.h>
 
@@ -126,9 +127,37 @@ static int	process_redirs(t_ast *cmd, t_redir_cb cb, t_heredoc_cb hd_cb)
 	return (1);
 }
 
+static int	run_builtin_parent(t_interpreter_context *ctx, t_ast *cmd,
+				t_builtin_fn fn)
+{
+	int	saved_in;
+	int	saved_out;
+	int	status;
+
+	saved_in = dup(STDIN_FILENO);
+	saved_out = dup(STDOUT_FILENO);
+	if (saved_in < 0 || saved_out < 0)
+		return (1);
+	if (!process_redirs(cmd, apply_one_redir, apply_one_heredoc))
+	{
+		dup2(saved_in, STDIN_FILENO);
+		dup2(saved_out, STDOUT_FILENO);
+		close(saved_in);
+		close(saved_out);
+		return (1);
+	}
+	status = fn(ctx->shell, cmd->args);
+	dup2(saved_in, STDIN_FILENO);
+	dup2(saved_out, STDOUT_FILENO);
+	close(saved_in);
+	close(saved_out);
+	return (status);
+}
+
 static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context *ctx)
 {
-	int	pid;
+	int				pid;
+	t_builtin_fn	fn;
 
 	pid = fork();
 	ctx->pid_arr[ctx->pid_len++] = pid;
@@ -153,7 +182,12 @@ static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context
 		for (int i_fd = 3; i_fd < 512; i_fd++)
 			close(i_fd);
 
-		execve(cmd->start->lexeme, build_argv(cmd->start, cmd->end), NULL);
+		fn = NULL;
+		if (cmd->args && cmd->args[0])
+			fn = get_builtin(cmd->args[0]);
+		if (fn)
+			exit(fn(ctx->shell, cmd->args));
+		execve(cmd->start->lexeme, build_argv(cmd->start, cmd->end), ctx->shell->envp);
 		exit(127);
 	}
 }
@@ -188,12 +222,27 @@ static int	traverse(t_ast *ast, int fd_read, int fd_write, t_interpreter_context
 	return (1);
 }
 
-t_interpreter_result	interpret(t_ast *ast)
+t_interpreter_result	interpret(t_shell *shell)
 {
 	t_interpreter_context	context;
 	t_interpreter_result	result;
+	t_builtin_fn			fn;
+
 	context.pid_len = 0;
-	traverse(ast, STDIN_FILENO, STDOUT_FILENO, &context);
+	context.shell = shell;
+	result.exit_status = 0;
+	result.signal = 0;
+	if (shell->ast && shell->ast->ast_type == AST_CMD
+		&& shell->ast->args && shell->ast->args[0])
+	{
+		fn = get_builtin(shell->ast->args[0]);
+		if (fn)
+		{
+			result.exit_status = run_builtin_parent(&context, shell->ast, fn);
+			return (result);
+		}
+	}
+	traverse(shell->ast, STDIN_FILENO, STDOUT_FILENO, &context);
 
 	while (context.pid_len > 0)
 	{

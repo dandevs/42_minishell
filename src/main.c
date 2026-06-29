@@ -35,7 +35,8 @@ int	main(int agc, char **agv, char **envp)
 		}
 		print_redirs(shell.ast);
 		print_tokens(&shell);
-		shell.last_status = interpret(shell.ast).exit_status;
+		//print_ast(shell.ast);
+		shell.last_status = interpret(&shell).exit_status;
 		cleanup_loop(&shell);
 	}
 }
