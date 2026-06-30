@@ -22,18 +22,21 @@
 # include "libft.h"
 # include "ft_printf.h"
 
-extern int	g_signal;
+extern int				g_signal;
 
-typedef struct	s_tokens t_tokens;
+typedef struct s_tokens	t_tokens;
+typedef struct s_redirs	t_redirs;
+typedef struct s_ast	t_ast;
+typedef int				(*t_redir_cb)(t_tokens *op, t_tokens *file);
 
-typedef enum	e_mode
+typedef enum e_mode
 {
 	SINGLEQ,
 	DOUBLEQ,
 	NORMAL
 }	t_mode;
 
-typedef enum	e_token
+typedef enum e_token
 {
 	PIPE,
 	GREATER,
@@ -44,7 +47,7 @@ typedef enum	e_token
 	END
 }	t_token;
 
-typedef struct	s_tokens
+typedef struct s_tokens
 {
 	t_token		token;
 	char		*lexeme;
@@ -58,9 +61,7 @@ typedef enum e_ast_type
 	AST_PIPE,
 }	t_ast_type;
 
-typedef struct	s_redirs t_redirs;
-
-typedef struct	s_redirs
+typedef struct s_redirs
 {
 	t_tokens	*tokens;
 	t_tokens	*file;
@@ -69,9 +70,8 @@ typedef struct	s_redirs
 }	t_redirs;
 
 //right and left : uniquement pour noeuds de type : (AND OR) et PIPE
-typedef struct	s_ast t_ast;
 
-typedef struct	s_ast
+typedef struct s_ast
 {
 	t_tokens		*start;
 	t_tokens		*end;
@@ -104,8 +104,6 @@ typedef struct s_interpreter_context
 	int		pid_len;
 }	t_interpreter_context;
 
-typedef int	(*t_redir_cb)(t_tokens *op, t_tokens *file);
-
 void		setup(int agc, char **agv, char **envp, t_shell *shell);
 int			check_signal(t_shell *shell, int sig);
 void		setup_signals(t_shell *shell);
@@ -114,7 +112,7 @@ char		*get_line(t_shell *shell);
 
 int			tokens_syntax_error(t_tokens *tokens);
 
-int 		parse(t_shell *shell);
+int			parse(t_shell *shell);
 
 int			tokens_get(t_shell *shell, char *line);
 t_tokens	*tokens_values(t_tokens *last, char *line, int i);
@@ -129,7 +127,8 @@ int			resolve_hd_recursive(t_ast *ast);
 
 int			build_args_recursive(t_ast *ast, int last_status, char **envp);
 int			expand(t_ast *ast, int last_stat, char **envp);
-int			check_expand_string(char **str, int hd, char *last_status, char **envp);
+int			check_expand_string(char **str, int hd, char *last_status,
+				char **envp);
 int			tokens_to_lst(t_list **lst, t_tokens *start, t_tokens *end);
 int			finalize_lst(t_list **lst);
 int			lst_to_args(t_list *lst, t_ast *ast);
@@ -141,7 +140,7 @@ void		cleanup_tokens(t_shell *shell);
 void		free_ast(t_ast *ast);
 void		cleanup_ast(t_shell *shell);
 
-int 		mode_change(t_mode *mode, char *word, int i);
+int			mode_change(t_mode *mode, char *word, int i);
 char		*envp_value(char *name, char *last_status, char **envp);
 
 void		print_tokens(t_shell *shell);
@@ -154,4 +153,3 @@ void		print_args(t_ast *ast);
 t_interpreter_result	interpret(t_ast *ast);
 
 #endif
-

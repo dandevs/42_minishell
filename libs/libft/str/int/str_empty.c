@@ -27,4 +27,3 @@ int	str_empty(char *str)
 	}
 	return (1);
 }
-

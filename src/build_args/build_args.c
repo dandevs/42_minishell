@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 01:33:10 by mat               #+#    #+#             */
-/*   Updated: 2026/06/25 01:02:01 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/01 01:29:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ int	ambiguous_redirect(t_redirs **redirs)
 	return (0);
 }
 
-int build_args_recursive(t_ast *ast, int last_status, char **envp)
+int	build_args_recursive(t_ast *ast, int last_status, char **envp)
 {
 	t_list	*args_lst;
 
 	if (ast->ast_type == AST_PIPE)
 	{
-		if (!build_args_recursive(ast->left, last_status, envp) || !build_args_recursive(ast->right, last_status, envp))
+		if (!build_args_recursive(ast->left, last_status, envp)
+			|| !build_args_recursive(ast->right, last_status, envp))
 			return (0);
 	}
 	else

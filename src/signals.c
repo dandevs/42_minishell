@@ -34,19 +34,21 @@ void	handle_signals(int sig)
 	}
 }
 
+	/*sigaddset(&mask, SIGQUIT);
+	sigaddset(&mask, SIGTERM)*/
+
 void	setup_signals(t_shell *shell)
 {
 	struct sigaction	sa;
-	sigset_t				mask;
+	sigset_t			mask;
 
 	g_signal = 0;
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGINT);
-	//sigaddset(&mask, SIGQUIT);
-	//sigaddset(&mask, SIGTERM)
 	sa.sa_mask = mask;
 	sa.sa_flags = SA_RESTART;
 	sa.sa_handler = handle_signals;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
-		cleanup_and_exit(shell, "failed to define critical signals\n", STDOUT_FILENO, 1);
+		cleanup_and_exit(shell, "failed to define critical signals\n",
+			STDOUT_FILENO, 1);
 }

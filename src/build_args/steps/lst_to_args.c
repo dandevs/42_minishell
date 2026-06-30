@@ -20,7 +20,6 @@ int	lst_to_args(t_list *lst, t_ast *ast)
 	ast->args = malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
 	if (!ast->args)
 		return (ft_lstclear(&lst, free), 0);
-
 	i = 0;
 	tmp = lst;
 	while (tmp)

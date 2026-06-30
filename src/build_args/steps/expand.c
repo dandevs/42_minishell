@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 22:08:18 by mat               #+#    #+#             */
-/*   Updated: 2026/06/25 00:52:21 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/01 01:28:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*int	expand_var(char *var, char **var_new_val, char **var_og_val, char **envp)
+/*int	expand_var(char *var, char **var_new_val, char **var_og_val,
+char **envp)
 {
 	int		i;
 
@@ -27,7 +28,8 @@
 	return (1);
 }*/
 
-int	expand_tokens(t_tokens *start, t_tokens *end, char *last_status, char **envp)
+int	expand_tokens(t_tokens *start, t_tokens *end, char *last_status,
+	char **envp)
 {
 	int	redir_file;
 
@@ -69,9 +71,10 @@ int	expand_redirs(t_redirs	**redirs, char *last_status, char **envp)
 				expand_hd = 0;
 			j++;
 		}
-		if (expand_hd && !check_expand_string(&(redirs[i]->hd), 1, last_status, envp))
-			return (0);
-		if (redirs[i]->file && !check_expand_string(&(redirs[i]->file->lexeme), 0, last_status, envp))
+		if ((expand_hd && !check_expand_string(&(redirs[i]->hd), 1,
+					last_status, envp)) || (redirs[i]->file
+				&& !check_expand_string(&(redirs[i]->file->lexeme),
+					0, last_status, envp)))
 			return (0);
 		i++;
 	}
@@ -92,4 +95,3 @@ int	expand(t_ast *ast, int last_stat, char **envp)
 	free(last_status);
 	return (1);
 }
-

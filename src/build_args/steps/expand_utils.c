@@ -32,14 +32,15 @@ int	do_expand_string(char **str, int i, char *last_status, char **envp)
 	int		len;
 
 	len = 1;
-	while ((*str)[i + len] && (ft_isalnum((*str)[i + len]) || (*str)[i + len] == '_'))
+	while ((*str)[i + len] && (ft_isalnum((*str)[i + len])
+		|| (*str)[i + len] == '_'))
 		len++;
-	if (len == 1  && (*str)[i + len] == '?')
+	if (len == 1 && (*str)[i + len] == '?')
 		len++;
 	var_og_val = malloc(sizeof(char) * (len + 1));
 	if (!var_og_val)
 		return (-1);
-	ft_strlcpy(var_og_val, *str + i , len + 1);
+	ft_strlcpy(var_og_val, *str + i, len + 1);
 	var_new_val = envp_value(var_og_val + 1, last_status, envp);
 	len = ft_strlen(var_new_val);
 	var_new_val = str_replace(*str + i, var_og_val, var_new_val);
