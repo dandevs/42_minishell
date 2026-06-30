@@ -46,7 +46,8 @@ char	*str_replace(char *str, char *old, char *new)
 
 	if (!ft_strnstr(str, old, ft_strlen(str)))
 		return (ft_strdup(str));
-	dest = malloc(sizeof(char) * (ft_strlen(str) - ft_strlen(old) + ft_strlen(new) + 1));
+	dest = malloc(sizeof(char) * (ft_strlen(str) - ft_strlen(old)
+				+ ft_strlen(new) + 1));
 	if (!dest)
 		return (NULL);
 	str_replace2(str, dest, old, new);
