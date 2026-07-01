@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-/* exit code 3 :
+// exit code 3 :
 // Invalid argument: An incorrect or missing argument was provided
 // to the script
 
 //envp : char ** recree a chaque set / unset / export ->oui ?
 
-t_list	*lst_envp(char **envp)
+/*t_list	*lst_envp(char **envp)
 {
 	t_list	*lst;
 	t_list	*node;
@@ -50,13 +50,13 @@ t_list	*lst_envp(char **envp)
 
 char	**setup_envp(char **envp)
 {
-	int		i;
+	int	i;
 	char	**dup;
 
 	i = 0;
 	dup = malloc(sizeof(char *) * (ptrptr_count((void **)envp) + 1));
 	if (!dup)
-		return (NULL);
+		return (0);
 	while (envp && envp[i])
 	{
 		dup[i] = ft_strdup(envp[i]);
@@ -71,6 +71,7 @@ char	**setup_envp(char **envp)
 	return (dup);
 }
 
+
 void	setup(int agc, char **agv, char **envp, t_shell *shell)
 {
 	(void)agc;
@@ -81,9 +82,9 @@ void	setup(int agc, char **agv, char **envp, t_shell *shell)
 	shell->ast = NULL;
 	shell->envp = setup_envp(envp);
 	shell->last_status = 0;
-	shell->line = NULL;
+	shell->line = NULL; //malloc = exit;	pas normal ?			3 lignes = setup?
 	shell->tokens = NULL;
 	if (!shell->envp || !shell->envp[0])
-		cleanup_and_exit(shell, "couldnt create envp dup", 2, 71);
-	setup_signals(shell);
+		cleanup_and_exit(shell, "couldnt create envp dup", 2, 71);	// exit malloc*/
+	setup_signals(shell); //erreur de signal exi;
 }

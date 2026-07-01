@@ -43,8 +43,8 @@ int	quote_syntax_error(t_tokens *iterate, char **error)
 	i = 0;
 	while (iterate->lexeme[i])
 	{
-		if ((iterate->lexeme[i] == '\"' && mode == DOUBLEQ)
-			|| (iterate->lexeme[i] == '\'' && mode == SINGLEQ))
+		if ((iterate->lexeme[i] == '\"' && mode == DOUBLEQ) ||
+		(iterate->lexeme[i] == '\'' && mode == SINGLEQ))
 			mode = NORMAL;
 		else if (iterate->lexeme[i] == '\'' && mode == NORMAL)
 			mode = SINGLEQ;
@@ -102,3 +102,5 @@ int	tokens_syntax_error(t_tokens *tokens)
 	}
 	return (0);
 }
+// quotes devrait peut etre etre detectees des tokens_value. (donc renvoyer null?).
+// AUSSI : SYNTAX error doit indiquer le token suivant qui n est pas suppose etre la

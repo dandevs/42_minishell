@@ -6,54 +6,53 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 01:58:31 by mat               #+#    #+#             */
-/*   Updated: 2026/07/01 01:44:40 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/22 23:15:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_no_quotes(char *word)
+int count_no_quotes(char *word)
 {
-	int		i;
-	int		count;
-	t_mode	mode;
+    int     i;
+    int     count;
+    t_mode  mode;
 
-	i = 0;
-	count = 0;
-	mode = NORMAL;
-	while (word[i])
-	{
-		if (!mode_change(&mode, word, i))
-			count++;
-		i++;
-	}
-	return (count);
+    i = 0;
+    count = 0;
+    mode = NORMAL;
+    while (word[i])
+    {
+        if (!mode_change(&mode, word, i))
+            count++;
+        i++;
+    }
+    return (count);
 }
 
-int	get_hd_delimiter(t_redirs *redirs)
+int get_hd_delimiter(t_redirs *redirs)
 {
-	int		i;
-	t_mode	mode;
+    int     i;
+    t_mode  mode;
 
-	i = count_no_quotes(redirs->file->lexeme);
-	redirs->delimiter = malloc(sizeof(char) * (i + 1));
-	i = 0;
-	if (!redirs->delimiter)
-		return (0);
-	while (redirs->file->lexeme[i])
-	{
-		if (!mode_change(&mode, redirs->file->lexeme, i))
-			redirs->delimiter[i] = redirs->file->lexeme[i];
-		i++;
-	}
-	redirs->delimiter[i] = '\0';
-	return (1);
+    i = count_no_quotes(redirs->file->lexeme);
+    redirs->delimiter = malloc(sizeof(char) * (i + 1));
+    i = 0;
+    if (!redirs->delimiter)
+        return (0);
+    while (redirs->file->lexeme[i])
+    {
+        if (!mode_change(&mode, redirs->file->lexeme, i))
+            redirs->delimiter[i] = redirs->file->lexeme[i];
+        i++;
+    }
+    redirs->delimiter[i] = '\0';
+    return (1);
 }
-
 int	get_hd_body(t_redirs *redirs)
 {
-	char	*line;
-	char	*tmp;
+	char    *line;
+	char    *tmp;
 
 	redirs->hd = ft_strdup("");
 	if (!redirs->hd)
@@ -79,30 +78,30 @@ int	get_hd_body(t_redirs *redirs)
 	return (1);
 }
 
-int	resolve_hd_recursive(t_ast *ast)
+int resolve_hd_recursive(t_ast *ast)
 {
-	int	i;
+    int i;
 
-	i = 0;
-	if (ast->ast_type == AST_PIPE)
-	{
-		if (!resolve_hd_recursive(ast->left))
-			return (0);
-		if (!resolve_hd_recursive(ast->right))
-			return (0);
-		return (1);
-	}
-	while (ast->redirs[i])
-	{
-		if (ast->redirs[i]->tokens->token == DLESSER)
-		{
-			if (!get_hd_delimiter(ast->redirs[i]))
-				return (0);
-			if (!get_hd_body(ast->redirs[i]))
-				return (0);
+    i = 0;
+    if (ast->ast_type == AST_PIPE)
+    {
+        if (!resolve_hd_recursive(ast->left))
+            return (0);
+        if (!resolve_hd_recursive(ast->right))
+            return (0);
+        return (1);
+    }
+    while (ast->redirs[i])
+    {
+        if (ast->redirs[i]->tokens->token == DLESSER)
+        {
+            if (!get_hd_delimiter(ast->redirs[i]))
+                return (0);
+            if (!get_hd_body(ast->redirs[i]))
+                return (0);
 			ast->redirs[i]->file = NULL;
-		}
-		i++;
-	}
-	return (1);
+        }
+        i++;
+    }
+    return (1);
 }

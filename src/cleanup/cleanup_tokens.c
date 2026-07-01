@@ -34,3 +34,4 @@ void	cleanup_tokens(t_shell *shell)
 		free_tokens(shell->tokens);
 	shell->tokens = NULL;
 }
+

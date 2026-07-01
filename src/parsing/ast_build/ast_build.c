@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-int	ast_initialize(t_ast **ast, t_tokens *start, t_tokens *end,
-				t_tokens *binary)
+int	ast_initialize(t_ast **ast, t_tokens *start, t_tokens *end, t_tokens *binary)
 {
 	*ast = calloc(1, sizeof(t_ast));
 	if (!*ast)
@@ -55,8 +54,7 @@ int	ast_build_recursive(t_ast **ast, t_tokens *start, t_tokens *end)
 	}
 	else
 	{
-		(*ast)->redirs = calloc((count_redirs(start, end) + 1),
-				sizeof(t_redirs *));
+		(*ast)->redirs = calloc((count_redirs(start, end) + 1), sizeof(t_redirs *));
 		if (get_redirs(ast, start, end))
 			return (1);
 	}

@@ -19,8 +19,7 @@ int	new_arg(t_list *node, char *content, int i)
 	t_list	*new;
 	char	*trimmed_content;
 
-	new = ft_lstnew((void *)ft_substr(content, i + 1,
-				ft_strlen(content + i + 1)));
+	new = ft_lstnew((void *)ft_substr(content, i + 1, ft_strlen(content + i + 1)));
 	if (!new)
 		return (0);
 	if (!new->content)
@@ -34,6 +33,7 @@ int	new_arg(t_list *node, char *content, int i)
 	((char *)node->content)[i] = '\0';
 	return (1);
 }
+
 
 int	split_args(t_list *node)
 {
@@ -102,8 +102,7 @@ int	remove_quotes(t_list *node)
 		while (((char *)node->content)[i])
 		{
 			if (mode_change(&mode, ((char *)node->content), i))
-				ft_memmove(node->content + i, node->content + i + 1,
-					1 + ft_strlen((char *)node->content + i));
+				ft_memmove(node->content + i, node->content + i + 1, 1 + ft_strlen((char *)node->content + i));
 			else
 				i++;
 		}
@@ -112,11 +111,14 @@ int	remove_quotes(t_list *node)
 	return (1);
 }
 
+//ft_memmove(node->content + i, node->content + i + 1, 1 + ft_strlen(node->content + i));
+
 int	finalize_lst(t_list **lst)
 {
 	if (!split_args(*lst))
 		return (ft_lstclear(lst, free), 0);
 	if (!remove_blanks(lst, *lst) || !remove_quotes(*lst))
 		return (ft_lstclear(lst, free), 0);
+	//print_lst(*lst);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 08:08:00 by mavallee          #+#    #+#             */
-/*   Updated: 2026/06/28 01:41:36 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/22 20:23:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 int					ft_strcmp(char *s1, char *s2);
 long				ft_abs(long n);
 int					ft_issign(int c);
-int					ptrptr_count(void **tab);
-int					ptrptr_free(void **tab);
-int					ft_lstsplit(t_list *lst, int i);
+int 				ptrptr_count(void **tab);
+int 				ptrptr_free(void **tab);
+int 				ft_lstsplit(t_list *lst, int i);
 char				*str_replace(char *str, char *old, char *new);
 
 #endif
