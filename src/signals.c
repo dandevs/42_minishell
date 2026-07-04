@@ -52,3 +52,14 @@ void	setup_signals(t_shell *shell)
 		cleanup_and_exit(shell, "failed to define critical signals\n",
 			STDOUT_FILENO, 1);
 }
+
+void	reset_signals_default(void)
+{
+	struct sigaction	sa;
+
+	sa.sa_handler = SIG_DFL;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
+}

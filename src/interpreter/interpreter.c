@@ -164,6 +164,7 @@ static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context
 
 	if (pid == 0)
 	{
+		reset_signals_default();
 		if (fd_read != STDIN_FILENO)
 		{
 			dup2(fd_read, STDIN_FILENO);
