@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-static	int	add_node(char *lexeme)
+static	int	add_node(t_list **lst, char *lexeme)
 {
 	t_list	*node;
 	char	*content;
 
-	content = ft_strdup(start->lexeme);
+	content = ft_strdup(lexeme);
 	if (!content)
 		return (0);
 	node = ft_lstnew((void *)content);
@@ -43,7 +43,7 @@ int	tokens_to_lst(t_list **lst, t_tokens *start, t_tokens *end)
 			start = start->next;
 			continue ;
 		}
-		if (!add_node(start->lexeme))
+		if (!add_node(lst, start->lexeme))
 			return (0);
 		start = start->next;
 	}
