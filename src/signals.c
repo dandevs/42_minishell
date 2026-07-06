@@ -50,7 +50,7 @@ void	setup_signals(t_shell *shell)
 	sa.sa_handler = handle_signals;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		cleanup_and_exit(shell, "failed to define critical signals\n",
-			STDOUT_FILENO, 1);
+			STDERR_FILENO, 1);
 }
 
 void	reset_signals_default(void)
