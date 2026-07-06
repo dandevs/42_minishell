@@ -6,11 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 00:51:12 by mat               #+#    #+#             */
-/*   Updated: 2026/06/28 01:49:51 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/06 03:40:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "parse.h"
 
 int	parse(t_shell *shell)
 {

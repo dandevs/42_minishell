@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "parse.h"
 
 int	ast_initialize(t_ast **ast, t_tokens *start, t_tokens *end,
 				t_tokens *binary)

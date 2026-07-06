@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "parse.h"
 
 void	tokens_lexeme_value2(t_tokens *tokens, char *line, int i)
 {
