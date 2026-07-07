@@ -154,10 +154,59 @@ static int	run_builtin_parent(t_interpreter_context *ctx, t_ast *cmd,
 	return (status);
 }
 
+static char	*resolve_path(char *name, char **envp)
+{
+	char	*path_env;
+	char	**dirs;
+	char	*tmp;
+	char	*candidate;
+	int		i;
+
+	if (!name || !*name)
+		return (NULL);
+	if (ft_strchr(name, '/'))
+		return (ft_strdup(name));
+	path_env = envp_value("PATH", NULL, envp);
+	if (!path_env)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(name, STDERR_FILENO);
+		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+		return (NULL);
+	}
+	dirs = ft_split(path_env, ':');
+	if (!dirs)
+		return (NULL);
+	i = 0;
+	while (dirs[i])
+	{
+		tmp = ft_strjoin(dirs[i], "/");
+		if (!tmp)
+			break ;
+		candidate = ft_strjoin(tmp, name);
+		free(tmp);
+		if (!candidate)
+			break ;
+		if (access(candidate, X_OK) == 0)
+		{
+			ptrptr_free((void **)dirs);
+			return (candidate);
+		}
+		free(candidate);
+		i++;
+	}
+	ptrptr_free((void **)dirs);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(name, STDERR_FILENO);
+	ft_putendl_fd(": command not found", STDERR_FILENO);
+	return (NULL);
+}
+
 static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context *ctx)
 {
 	int				pid;
 	t_builtin_fn	fn;
+	char			*path;
 
 	pid = fork();
 	ctx->pid_arr[ctx->pid_len++] = pid;
@@ -188,7 +237,11 @@ static void	run_cmd(t_ast *cmd, int fd_read, int fd_write, t_interpreter_context
 			fn = get_builtin(cmd->args[0]);
 		if (fn)
 			exit(fn(ctx->shell, cmd->args));
-		execve(cmd->start->lexeme, build_argv(cmd->start, cmd->end), ctx->shell->envp);
+		path = resolve_path(cmd->args[0], ctx->shell->envp);
+		if (!path)
+			exit(127);
+		execve(path, build_argv(cmd->start, cmd->end), ctx->shell->envp);
+		free(path);
 		exit(127);
 	}
 }
