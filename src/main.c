@@ -19,7 +19,7 @@ int	main(int agc, char **agv, char **envp)
 	t_shell	shell;
 
 	setup(agc, agv, envp, &shell);
-	print_envp(shell.envp);
+	// print_envp(shell.envp);
 	while (1)
 	{
 		shell.line = get_line(&shell);
@@ -33,8 +33,8 @@ int	main(int agc, char **agv, char **envp)
 			cleanup_loop(&shell);
 			continue ;
 		}
-		print_redirs(shell.ast);
-		print_tokens(&shell);
+		// print_redirs(shell.ast);
+		// print_tokens(&shell);
 		//print_ast(shell.ast);
 		shell.last_status = interpret(&shell).exit_status;
 		cleanup_loop(&shell);
