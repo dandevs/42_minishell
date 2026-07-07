@@ -65,7 +65,9 @@ int	check_expand_string(char **str, int hd, char *last_status, char **envp)
 	while ((*str)[i])
 	{
 		mode_change(&mode, *str, i);
-		if ((mode == NORMAL || mode == DOUBLEQ || hd == 1) && (*str)[i] == '$')
+		if ((mode == NORMAL || mode == DOUBLEQ || hd == 1) && (*str)[i] == '$'
+			&& ((*str)[i + 1] == '?' || ft_isalnum((*str)[i + 1])
+				|| (*str)[i + 1] == '_'))
 		{
 			str_len = do_expand_string(str, i, last_status, envp);
 			if (str_len == -1)
