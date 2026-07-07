@@ -381,6 +381,11 @@ static int	builtin_cd(t_shell *shell, char **args)
 	char	old[4096];
 	char	new[4096];
 
+	if (args[1] && args[2])
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
+		return (1);
+	}
 	target = args[1];
 	if (!target)
 	{
