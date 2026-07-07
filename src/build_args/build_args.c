@@ -58,7 +58,6 @@ int	build_args_recursive(t_ast *ast, int last_status, char **envp)
 			return (0);
 		if (!lst_to_args(args_lst, ast))
 			return (0);
-		print_args(ast);
 	}
 	return (1);
 }
