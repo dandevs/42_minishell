@@ -6,7 +6,7 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 07:14:58 by danimend          #+#    #+#             */
-/*   Updated: 2026/06/29 18:22:03 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/07 14:38:22 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,9 @@ t_interpreter_result	interpret(t_shell *shell)
 	t_interpreter_context	context;
 	t_interpreter_result	result;
 	t_builtin_fn			fn;
+	int						last_pid;
+	int						i;
+	int						status;
 
 	context.pid_len = 0;
 	context.shell = shell;
@@ -298,25 +301,25 @@ t_interpreter_result	interpret(t_shell *shell)
 	}
 	traverse(shell->ast, STDIN_FILENO, STDOUT_FILENO, &context);
 
-	while (context.pid_len > 0)
+	if (context.pid_len == 0)
+		return (result);
+	last_pid = context.pid_arr[context.pid_len - 1];
+	i = 0;
+	while (i < context.pid_len)
 	{
-		int	status;
-		int	pid;
-
-		pid = context.pid_arr[--context.pid_len];
-		waitpid(pid, &status, 0);
-
-		if (WIFSIGNALED(status))
+		waitpid(context.pid_arr[i], &status, 0);
+		if (context.pid_arr[i] == last_pid)
 		{
-			return (t_interpreter_result)
+			if (WIFSIGNALED(status))
 			{
-				.exit_status = 128 + WTERMSIG(status),
-				.signal = WTERMSIG(status)
-			};
+				return ((t_interpreter_result){
+					.exit_status = 128 + WTERMSIG(status),
+					.signal = WTERMSIG(status)});
+			}
+			result.exit_status = WEXITSTATUS(status);
+			result.signal = 0;
 		}
-
-		result.exit_status = WEXITSTATUS(status);
-		result.signal = 0;
+		i++;
 	}
 
 	return (result);
