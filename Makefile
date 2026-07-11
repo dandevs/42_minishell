@@ -25,7 +25,7 @@ SRC_PARSE_FILES = parse.c $(SRC_AST) $(SRC_TOKENS)
 SRC_PARSE = $(foreach F,$(SRC_PARSE_FILES),$(SRC_PARSE_DIR)$F)
 
 SRC_INTERPRETOR_DIR = interpreter/
-SRC_INTERPRETOR_FILES = interpreter.c
+SRC_INTERPRETOR_FILES = interpreter.c redir_helpers.c exec_helpers.c path_helpers.c child_helpers.c
 SRC_INTERPRETOR = $(foreach F,$(SRC_INTERPRETOR_FILES),$(SRC_INTERPRETOR_DIR)$F)
 
 SRC_ARGS_DIR = build_args/
