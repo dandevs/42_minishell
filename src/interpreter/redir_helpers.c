@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redir_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:39:17 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 18:27:43 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:15:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "interpreter.h"
-#include <fcntl.h>
 
-static int	is_redir(t_token t)
+/*static int	is_redir(t_token t)
 {
 	return (t == GREATER || t == DGREATER || t == LESSER || t == DLESSER);
 }
@@ -67,7 +65,7 @@ char	**build_argv(t_tokens *start, t_tokens *end)
 	}
 	argv[i] = NULL;
 	return (argv);
-}
+}*/
 
 int	apply_one_redir(t_tokens *op, t_tokens *file)
 {

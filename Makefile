@@ -8,6 +8,8 @@ ARC_LIBFT = libs/libft/libft.a
 ARC = $(ARC_PRINTF) $(ARC_LIBFT)
 INCLUDE = $(foreach H,$(HEADER),-I $H)
 
+DIRS = $(dir $(SRC))
+
 SRC_AST_DIR = ast_build/
 SRC_AST_FILES = redirs_utils.c ast_build.c
 SRC_AST = $(foreach F,$(SRC_AST_FILES),$(SRC_AST_DIR)$F)
@@ -24,20 +26,20 @@ SRC_PARSE_DIR = parsing/
 SRC_PARSE_FILES = parse.c $(SRC_AST) $(SRC_TOKENS)
 SRC_PARSE = $(foreach F,$(SRC_PARSE_FILES),$(SRC_PARSE_DIR)$F)
 
+SRC_BUILTINS_DIR = builtins/
+SRC_BUILTINS_FILES = builtins.c builtins_export.c builtins_cd.c builtins_exit.c builtins_unset.c env_helpers.c env_utils.c export_helpers.c
+SRC_BUILTINS = $(foreach F,$(SRC_BUILTINS_FILES),$(SRC_BUILTINS_DIR)$F)
+
 SRC_INTERPRETOR_DIR = interpreter/
-SRC_INTERPRETOR_FILES = interpreter.c redir_helpers.c exec_helpers.c path_helpers.c child_helpers.c
+SRC_INTERPRETOR_FILES = interpreter.c redir_helpers.c exec_helpers.c path_helpers.c child_helpers.c $(SRC_BUILTINS)
 SRC_INTERPRETOR = $(foreach F,$(SRC_INTERPRETOR_FILES),$(SRC_INTERPRETOR_DIR)$F)
 
 SRC_ARGS_DIR = build_args/
 SRC_ARGS_FILES = build_args.c steps/expand.c steps/tokens_to_lst.c steps/finalize_lst.c steps/lst_to_args.c steps/expand_utils.c
 SRC_ARGS = $(foreach F,$(SRC_ARGS_FILES),$(SRC_ARGS_DIR)$F)
 
-SRC_BUILTINS_DIR = builtins/
-SRC_BUILTINS_FILES = builtins.c builtins_export.c builtins_cd.c builtins_exit.c builtins_unset.c env_helpers.c env_utils.c export_helpers.c
-SRC_BUILTINS = $(foreach F,$(SRC_BUILTINS_FILES),$(SRC_BUILTINS_DIR)$F)
-
 SRC_DIR = src/
-SRC_FILES = main.c get_line.c setup.c signals.c test.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR) $(SRC_ARGS) $(SRC_BUILTINS)
+SRC_FILES = main.c get_line.c setup.c signals.c test.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR) $(SRC_ARGS)
 SRC = $(foreach F,$(SRC_FILES),$(SRC_DIR)$F)
 
 OBJ = $(SRC:.c=.o)

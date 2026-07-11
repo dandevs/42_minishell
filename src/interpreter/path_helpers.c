@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   path_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:13:07 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 17:18:05 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:14:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "interpreter.h"
 
 int	has_slash(char *name)

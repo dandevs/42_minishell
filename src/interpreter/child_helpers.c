@@ -6,13 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:29:02 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 20:06:06 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/11 20:15:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "interpreter.h"
-#include "builtins.h"
 
 void	setup_child_fds(int fd_read, int fd_write)
 {

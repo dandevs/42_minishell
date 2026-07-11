@@ -3,23 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 12:00:00 by marvin            #+#    #+#             */
-/*   Updated: 2026/06/27 06:56:51 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:16:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "minishell.h"
+# include "interpreter.h"
 
 # define BUILTINS_COUNT 7
 
-typedef int	(*t_builtin_fn)(t_shell *shell, char **args);
-
-t_builtin_fn	get_builtin(char *name);
 int			name_matches(char *entry, char *name);
 int			env_set_entry(t_shell *shell, char *entry);
 int			env_declare(t_shell *shell, char *name);

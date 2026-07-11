@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "interpreter.h"
-#include "builtins.h"
-#include <sys/wait.h>
 
 static int	apply_one_heredoc(char *hd)
 {

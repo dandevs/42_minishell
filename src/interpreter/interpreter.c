@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   interpreter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:09:56 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 17:04:18 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:14:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "interpreter.h"
-#include <sys/wait.h>
 
 static int	traverse(t_ast *ast, int fd_read, int fd_write,
 				t_interpreter_context *ctx)
