@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:29:02 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 16:42:52 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:06:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	exec_child(t_ast *cmd, t_interpreter_context *ctx)
 	path = resolve_path(cmd->args[0], ctx->shell->envp);
 	if (!path)
 		exit(127);
-	execve(path, build_argv(cmd->start, cmd->end), ctx->shell->envp);
+	execve(path, cmd->args, ctx->shell->envp);
 	free(path);
 	exit(127);
 }
