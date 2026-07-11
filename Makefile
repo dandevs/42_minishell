@@ -33,7 +33,7 @@ SRC_ARGS_FILES = build_args.c steps/expand.c steps/tokens_to_lst.c steps/finaliz
 SRC_ARGS = $(foreach F,$(SRC_ARGS_FILES),$(SRC_ARGS_DIR)$F)
 
 SRC_BUILTINS_DIR = builtins/
-SRC_BUILTINS_FILES = builtins.c
+SRC_BUILTINS_FILES = builtins.c builtins_export.c builtins_cd.c builtins_exit.c builtins_unset.c env_helpers.c env_utils.c export_helpers.c
 SRC_BUILTINS = $(foreach F,$(SRC_BUILTINS_FILES),$(SRC_BUILTINS_DIR)$F)
 
 SRC_DIR = src/
