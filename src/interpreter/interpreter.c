@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:09:56 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 20:14:32 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/25 21:48:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	traverse(t_ast *ast, int fd_read, int fd_write,
 	}
 	else if (ast->ast_type == AST_CMD)
 	{
-		run_cmd(ast, fd_read, fd_write, ctx);
+		run_cmd_child(ast, fd_read, fd_write, ctx);
 	}
 	return (1);
 }

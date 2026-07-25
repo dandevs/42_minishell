@@ -1,71 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir_helpers.c                                    :+:      :+:    :+:   */
+/*   process_redirs.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:39:17 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 20:15:48 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/25 22:14:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "interpreter.h"
+#include "run.h"
 
-/*static int	is_redir(t_token t)
+int	apply_one_heredoc(char *hd)
 {
-	return (t == GREATER || t == DGREATER || t == LESSER || t == DLESSER);
+	int	p[2];
+
+	if (pipe(p) < 0)
+		return (perror("minishell: heredoc"), 0);
+	write(p[1], hd, ft_strlen(hd));
+	close(p[1]);
+	dup2(p[0], STDIN_FILENO);
+	close(p[0]);
+	return (1);
 }
-
-static void	skip_redir_token_and_word(t_tokens **head)
-{
-	*head = (*head)->next;
-	if (*head)
-		*head = (*head)->next;
-}
-
-static int	count_argv(t_tokens *start, t_tokens *end)
-{
-	int	count;
-
-	count = 0;
-	while (start && start != end)
-	{
-		if (is_redir(start->token))
-		{
-			skip_redir_token_and_word(&start);
-			continue ;
-		}
-		if (start->token == WORD)
-			count++;
-		start = start->next;
-	}
-	return (count);
-}
-
-char	**build_argv(t_tokens *start, t_tokens *end)
-{
-	char	**argv;
-	int		i;
-
-	argv = malloc(sizeof(char *) * (count_argv(start, end) + 1));
-	if (!argv)
-		return (NULL);
-	i = 0;
-	while (start && start != end)
-	{
-		if (is_redir(start->token))
-		{
-			skip_redir_token_and_word(&start);
-			continue ;
-		}
-		if (start->token == WORD)
-			argv[i++] = start->lexeme;
-		start = start->next;
-	}
-	argv[i] = NULL;
-	return (argv);
-}*/
 
 int	apply_one_redir(t_tokens *op, t_tokens *file)
 {
@@ -88,5 +46,26 @@ int	apply_one_redir(t_tokens *op, t_tokens *file)
 		target = STDOUT_FILENO;
 	dup2(fd, target);
 	close(fd);
+	return (1);
+}
+
+int	process_redirs(t_ast *cmd, t_redir_cb cb, t_heredoc_cb hd_cb)
+{
+	int			i;
+	t_redirs	*redir;
+
+	i = 0;
+	while (cmd->redirs && cmd->redirs[i])
+	{
+		redir = cmd->redirs[i];
+		if (redir->tokens->token == DLESSER)
+		{
+			if (hd_cb && !hd_cb(redir->hd))
+				return (0);
+		}
+		else if (redir->file && !cb(redir->tokens, redir->file))
+			return (0);
+		i++;
+	}
 	return (1);
 }

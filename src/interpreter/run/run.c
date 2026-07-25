@@ -10,41 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "interpreter.h"
-
-static int	apply_one_heredoc(char *hd)
-{
-	int	p[2];
-
-	if (pipe(p) < 0)
-		return (perror("minishell: heredoc"), 0);
-	write(p[1], hd, ft_strlen(hd));
-	close(p[1]);
-	dup2(p[0], STDIN_FILENO);
-	close(p[0]);
-	return (1);
-}
-
-static int	process_redirs(t_ast *cmd, t_redir_cb cb, t_heredoc_cb hd_cb)
-{
-	int			i;
-	t_redirs	*redir;
-
-	i = 0;
-	while (cmd->redirs && cmd->redirs[i])
-	{
-		redir = cmd->redirs[i];
-		if (redir->tokens->token == DLESSER)
-		{
-			if (hd_cb && !hd_cb(redir->hd))
-				return (0);
-		}
-		else if (redir->file && !cb(redir->tokens, redir->file))
-			return (0);
-		i++;
-	}
-	return (1);
-}
+#include "run.h"
 
 int	run_builtin_parent(t_interpreter_context *ctx, t_ast *cmd,
 		t_builtin_fn fn)
@@ -73,29 +39,7 @@ int	run_builtin_parent(t_interpreter_context *ctx, t_ast *cmd,
 	return (status);
 }
 
-char	*resolve_path(char *name, char **envp)
-{
-	char	**dirs;
-	char	*found;
-
-	if (!name || !*name)
-		return (NULL);
-	if (has_slash(name))
-		return (ft_strdup(name));
-	dirs = get_path_dirs(name, envp);
-	if (!dirs)
-		return (NULL);
-	found = search_path_dirs(dirs, name);
-	if (!found)
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(name, STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);
-	}
-	return (found);
-}
-
-void	run_cmd(t_ast *cmd, int fd_read, int fd_write,
+void	run_cmd_child(t_ast *cmd, int fd_read, int fd_write,
 		t_interpreter_context *ctx)
 {
 	int	pid;

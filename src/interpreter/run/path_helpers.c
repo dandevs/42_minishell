@@ -6,11 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:13:07 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 20:14:07 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/25 22:10:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "interpreter.h"
+#include "run.h"
 
 int	has_slash(char *name)
 {

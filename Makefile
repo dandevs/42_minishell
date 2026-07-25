@@ -30,8 +30,12 @@ SRC_BUILTINS_DIR = builtins/
 SRC_BUILTINS_FILES = builtins.c builtins_export.c builtins_cd.c builtins_exit.c builtins_unset.c env_helpers.c env_utils.c export_helpers.c
 SRC_BUILTINS = $(foreach F,$(SRC_BUILTINS_FILES),$(SRC_BUILTINS_DIR)$F)
 
+SRC_RUN_DIR = run/
+SRC_RUN_FILES = run.c child_helpers.c path_helpers.c process_redirs.c
+SRC_RUN = $(foreach F,$(SRC_RUN_FILES),$(SRC_RUN_DIR)$F)
+
 SRC_INTERPRETOR_DIR = interpreter/
-SRC_INTERPRETOR_FILES = interpreter.c redir_helpers.c exec_helpers.c path_helpers.c child_helpers.c $(SRC_BUILTINS)
+SRC_INTERPRETOR_FILES = interpreter.c $(SRC_RUN) $(SRC_BUILTINS)
 SRC_INTERPRETOR = $(foreach F,$(SRC_INTERPRETOR_FILES),$(SRC_INTERPRETOR_DIR)$F)
 
 SRC_ARGS_DIR = build_args/

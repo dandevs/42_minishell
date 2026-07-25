@@ -6,11 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:29:02 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 20:15:55 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/25 22:10:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "interpreter.h"
+#include "run.h"
 
 void	setup_child_fds(int fd_read, int fd_write)
 {
@@ -33,6 +33,28 @@ void	close_inherited_fds(void)
 	i_fd = 2;
 	while (++i_fd < 512)
 		close(i_fd);
+}
+
+static char	*resolve_path(char *name, char **envp)
+{
+	char	**dirs;
+	char	*found;
+
+	if (!name || !*name)
+		return (NULL);
+	if (has_slash(name))
+		return (ft_strdup(name));
+	dirs = get_path_dirs(name, envp);
+	if (!dirs)
+		return (NULL);
+	found = search_path_dirs(dirs, name);
+	if (!found)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(name, STDERR_FILENO);
+		ft_putendl_fd(": command not found", STDERR_FILENO);
+	}
+	return (found);
 }
 
 void	exec_child(t_ast *cmd, t_interpreter_context *ctx)
