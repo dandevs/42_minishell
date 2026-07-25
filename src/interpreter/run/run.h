@@ -14,6 +14,8 @@
 # define RUN_H
 
 # include "interpreter.h"
+# include <sys/types.h>
+# include <sys/stat.h>
 
 int				apply_one_redir(t_tokens *op, t_tokens *file);
 int				apply_one_heredoc(char *hd);
@@ -28,4 +30,3 @@ void			close_inherited_fds(void);
 void			exec_child(t_ast *cmd, t_interpreter_context *ctx);
 
 #endif
-

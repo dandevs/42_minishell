@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 08:08:00 by mavallee          #+#    #+#             */
-/*   Updated: 2026/06/28 01:41:36 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 00:07:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ int					ptrptr_count(void **tab);
 int					ptrptr_free(void **tab);
 int					ft_lstsplit(t_list *lst, int i);
 char				*str_replace(char *str, char *old, char *new);
+char				*ft_strjoin_3(char *s1, char *s2, char *s3);
 
 #endif

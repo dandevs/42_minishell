@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:13:07 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/25 22:10:04 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 00:49:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,29 @@ char	**get_path_dirs(char *name, char **envp)
 
 char	*search_path_dirs(char **dirs, char *name)
 {
-	char	*tmp;
 	char	*candidate;
+	char	*backup;
 	int		i;
 
-	i = 0;
-	while (dirs[i])
+	i = -1;
+	backup = NULL;
+	while (dirs[++i])
 	{
-		tmp = ft_strjoin(dirs[i], "/");
-		if (!tmp)
-			break ;
-		candidate = ft_strjoin(tmp, name);
-		free(tmp);
+		candidate = ft_strjoin_3(dirs[i], "/", name);
 		if (!candidate)
 			break ;
-		if (access(candidate, X_OK) == 0)
+		if (access(candidate, F_OK) != 0)
 		{
-			ptrptr_free((void **)dirs);
-			return (candidate);
+			free(candidate);
+			continue ;
 		}
+		if (backup)
+			free(backup);
+		backup = ft_strdup(candidate);
 		free(candidate);
-		i++;
+		if (access(backup, X_OK) != 0)
+			continue ;
+		break ;
 	}
-	ptrptr_free((void **)dirs);
-	return (NULL);
+	return (ptrptr_free((void **)dirs), backup);
 }

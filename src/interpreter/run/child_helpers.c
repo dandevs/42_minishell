@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:29:02 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/25 22:10:10 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 00:21:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,14 @@ static char	*resolve_path(char *name, char **envp)
 	if (!name || !*name)
 		return (NULL);
 	if (has_slash(name))
-		return (ft_strdup(name));
+	{
+		if (access(name, F_OK) == 0)
+			return (ft_strdup(name));
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(name, STDERR_FILENO);
+		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+		return (NULL);
+	}
 	dirs = get_path_dirs(name, envp);
 	if (!dirs)
 		return (NULL);
@@ -55,6 +62,34 @@ static char	*resolve_path(char *name, char **envp)
 		ft_putendl_fd(": command not found", STDERR_FILENO);
 	}
 	return (found);
+}
+
+static void	test_access(char *path)
+{
+	struct stat		buf;
+
+	if (access(path, X_OK) != 0)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putendl_fd(": Permission denied", STDERR_FILENO);
+		free(path);
+		exit(126);
+	}
+	if (stat(path, &buf) != 0)
+	{
+		free(path);
+		perror("minishell");
+		exit(127);
+	}
+	if (S_ISDIR(buf.st_mode))
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putendl_fd(": Is a directory", STDERR_FILENO);
+		free(path);
+		exit(126);
+	}
 }
 
 void	exec_child(t_ast *cmd, t_interpreter_context *ctx)
@@ -70,7 +105,9 @@ void	exec_child(t_ast *cmd, t_interpreter_context *ctx)
 	path = resolve_path(cmd->args[0], ctx->shell->envp);
 	if (!path)
 		exit(127);
+	test_access(path);
 	execve(path, cmd->args, ctx->shell->envp);
 	free(path);
+	perror("minishell: ");
 	exit(127);
 }
