@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_cd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:08 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 17:40:09 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/25 20:39:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ static char	*resolve_cd_target(t_shell *shell, char **args)
 	return (target);
 }
 
-static int	change_and_get_new(char *target, char *new)
+static int	change_and_get_new(char *target, char *new, size_t size)
 {
 	if (chdir(target) != 0)
 	{
 		perror("minishell: cd");
 		return (1);
 	}
-	if (!getcwd(new, sizeof(new)))
+	if (!getcwd(new, size))
 	{
 		perror("minishell: cd");
 		return (1);
@@ -62,7 +62,7 @@ int	builtin_cd(t_shell *shell, char **args)
 		perror("minishell: cd");
 		return (1);
 	}
-	if (change_and_get_new(target, new))
+	if (change_and_get_new(target, new, sizeof(new)))
 		return (1);
 	set_kv(shell, "OLDPWD", old);
 	set_kv(shell, "PWD", new);
