@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_exit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:10 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 17:40:12 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/26 02:46:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	builtin_exit(t_shell *shell, char **args)
 	if (args[2])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	status = (unsigned char)ft_atoi(args[1]);
 	cleanup_and_exit(shell, NULL, -1, status);

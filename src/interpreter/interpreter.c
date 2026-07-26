@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:09:56 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/25 21:48:38 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 02:42:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,16 @@ static int	traverse(t_ast *ast, int fd_read, int fd_write,
 	if (ast->ast_type == AST_PIPE)
 	{
 		pipe(fd);
+		ctx->fd_arr[ctx->fd_len++] = fd[0];
+		ctx->fd_arr[ctx->fd_len++] = fd[1];
 		if (ast->left != NULL)
 			traverse(ast->left, fd_read, fd[1], ctx);
 		if (ast->right != NULL)
 			traverse(ast->right, fd[0], fd_write, ctx);
-		if (fd[0] != STDIN_FILENO)
-			close(fd[0]);
 		if (fd[1] != STDOUT_FILENO)
 			close(fd[1]);
+		if (fd[0] != STDIN_FILENO)
+			close(fd[0]);
 	}
 	else if (ast->ast_type == AST_CMD)
 	{
@@ -69,7 +71,7 @@ static void	wait_and_collect_result(t_interpreter_context *ctx,
 		{
 			if (WIFSIGNALED(status))
 			{
-				result->exit_status = 128 + WTERMSIG(status);
+				result->exit_status = EX_SIGNAL_BASE + WTERMSIG(status);
 				result->signal = WTERMSIG(status);
 				return ;
 			}
@@ -85,10 +87,11 @@ t_interpreter_result	interpret(t_shell *shell)
 	t_interpreter_context	context;
 	t_interpreter_result	result;
 
-	context.pid_len = 0;
 	context.shell = shell;
 	result.exit_status = 0;
 	result.signal = 0;
+	context.pid_len = 0;
+	context.fd_len = 0;
 	if (try_builtin_only(shell, &context, &result))
 		return (result);
 	traverse(shell->ast, STDIN_FILENO, STDOUT_FILENO, &context);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:21 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/25 20:44:54 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 02:49:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	builtin_echo(t_shell *shell, char **args)
 	}
 	if (nl)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 static int	builtin_pwd(t_shell *shell, char **args)
@@ -64,15 +64,15 @@ static int	builtin_pwd(t_shell *shell, char **args)
 		ft_putstr_fd("minishell: pwd: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putstr_fd(": invalid option", 2);
-		return (2);
+		return (EX_MISUSE);
 	}
 	if (!getcwd(cwd, sizeof(cwd)))
 	{
 		perror("minishell: pwd");
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	ft_putendl_fd(cwd, STDOUT_FILENO);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 static int	builtin_env(t_shell *shell, char **args)
@@ -87,7 +87,7 @@ static int	builtin_env(t_shell *shell, char **args)
 			ft_putendl_fd(shell->envp[i], STDOUT_FILENO);
 		i++;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 t_builtin_fn	get_builtin(char *name)

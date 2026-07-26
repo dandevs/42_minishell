@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:08 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/25 20:39:13 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 02:45:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	builtin_cd(t_shell *shell, char **args)
 	if (args[1] && args[2])
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	target = resolve_cd_target(shell, args);
 	if (!target)
@@ -60,11 +60,11 @@ int	builtin_cd(t_shell *shell, char **args)
 	if (!getcwd(old, sizeof(old)))
 	{
 		perror("minishell: cd");
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	if (change_and_get_new(target, new, sizeof(new)))
 		return (1);
 	set_kv(shell, "OLDPWD", old);
 	set_kv(shell, "PWD", new);
-	return (0);
+	return (EXIT_SUCCESS);
 }

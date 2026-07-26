@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:29:02 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/26 00:21:29 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 02:44:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,18 @@ void	setup_child_fds(int fd_read, int fd_write)
 	}
 }
 
-void	close_inherited_fds(void)
+void	close_inherited_fds(t_interpreter_context *ctx, int fd_read, int fd_write)
 {
-	int	i_fd;
+	int	i;
 
-	i_fd = 2;
-	while (++i_fd < 512)
-		close(i_fd);
+	i = 0;
+	while (i < ctx->fd_len)
+	{
+		if (ctx->fd_arr[i] > 2 && ctx->fd_arr[i] != fd_read
+			&& ctx->fd_arr[i] != fd_write)
+			close(ctx->fd_arr[i]);
+		i++;
+	}
 }
 
 static char	*resolve_path(char *name, char **envp)
@@ -74,13 +79,13 @@ static void	test_access(char *path)
 		ft_putstr_fd(path, STDERR_FILENO);
 		ft_putendl_fd(": Permission denied", STDERR_FILENO);
 		free(path);
-		exit(126);
+		exit(EX_CANT_EXECUTE);
 	}
 	if (stat(path, &buf) != 0)
 	{
 		free(path);
 		perror("minishell");
-		exit(127);
+		exit(EX_CMD_NOT_FOUND);
 	}
 	if (S_ISDIR(buf.st_mode))
 	{
@@ -88,7 +93,7 @@ static void	test_access(char *path)
 		ft_putstr_fd(path, STDERR_FILENO);
 		ft_putendl_fd(": Is a directory", STDERR_FILENO);
 		free(path);
-		exit(126);
+		exit(EX_CANT_EXECUTE);
 	}
 }
 
@@ -102,12 +107,14 @@ void	exec_child(t_ast *cmd, t_interpreter_context *ctx)
 		fn = get_builtin(cmd->args[0]);
 	if (fn)
 		exit(fn(ctx->shell, cmd->args));
+	if (cmd->args[0] == NULL || cmd->args[0][0] == '\0')
+		exit(EXIT_SUCCESS);
 	path = resolve_path(cmd->args[0], ctx->shell->envp);
-	if (!path)
-		exit(127);
+	if (path == NULL)
+		exit(EX_CMD_NOT_FOUND);
 	test_access(path);
 	execve(path, cmd->args, ctx->shell->envp);
 	free(path);
 	perror("minishell: ");
-	exit(127);
+	exit(EX_CMD_NOT_FOUND);
 }

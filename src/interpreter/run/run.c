@@ -52,7 +52,7 @@ void	run_cmd_child(t_ast *cmd, int fd_read, int fd_write,
 		setup_child_fds(fd_read, fd_write);
 		if (!process_redirs(cmd, apply_one_redir, apply_one_heredoc))
 			exit(1);
-		close_inherited_fds();
+		close_inherited_fds(ctx, fd_read, fd_write);
 		exec_child(cmd, ctx);
 	}
 }

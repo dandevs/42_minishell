@@ -21,6 +21,17 @@
 # include <signal.h>
 # include "libft.h"
 # include "ft_printf.h"
+# define EX_MISUSE 2
+# define EX_CANT_EXECUTE 126
+# define EX_CMD_NOT_FOUND 127
+# define EX_SIGNAL_BASE 128
+
+/*
+EXIT_MISUSE			=2    // mauvais usage builtin (option invalide)
+EXIT_CANT_EXECUTE	=126  // trouvé mais pas exécutable
+EXIT_CMD_NOT_FOUND  127  // commande introuvable
+EXIT_SIGNAL_BASE
+*/
 
 extern int				g_signal;
 
@@ -101,7 +112,9 @@ typedef struct s_interpreter_result
 typedef struct s_interpreter_context
 {
 	t_shell	*shell;
-	int		pid_arr[256];
+	int		pid_arr[512];
+	int		fd_arr[512];
+	int		fd_len;
 	int		pid_len;
 }	t_interpreter_context;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_unset.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:14 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 17:40:15 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/26 02:48:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,5 @@ int	builtin_unset(t_shell *shell, char **args)
 		env_unset(shell, args[i]);
 		i++;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }

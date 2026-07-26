@@ -26,7 +26,8 @@ char			**get_path_dirs(char *name, char **envp);
 char			*search_path_dirs(char **dirs, char *name);
 
 void			setup_child_fds(int fd_read, int fd_write);
-void			close_inherited_fds(void);
+void			close_inherited_fds(t_interpreter_context *ctx,
+				int fd_read, int fd_write);
 void			exec_child(t_ast *cmd, t_interpreter_context *ctx);
 
 #endif

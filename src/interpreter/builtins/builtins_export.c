@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:13 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/11 17:40:14 by danimend         ###   ########.fr       */
+/*   Updated: 2026/07/26 02:57:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int	builtin_export(t_shell *shell, char **args)
 
 	if (!args[1])
 		return (export_print(shell->envp));
-	status = 0;
+	status = EXIT_SUCCESS;
 	i = 1;
 	while (args[i])
 	{
 		if (process_export_arg(shell, args[i]))
-			status = 1;
+			status = EXIT_FAILURE;
 		i++;
 	}
 	return (status);
