@@ -26,13 +26,6 @@
 # define EX_CMD_NOT_FOUND 127
 # define EX_SIGNAL_BASE 128
 
-/*
-EXIT_MISUSE			=2    // mauvais usage builtin (option invalide)
-EXIT_CANT_EXECUTE	=126  // trouvé mais pas exécutable
-EXIT_CMD_NOT_FOUND  127  // commande introuvable
-EXIT_SIGNAL_BASE
-*/
-
 extern int				g_signal;
 
 typedef struct s_tokens	t_tokens;

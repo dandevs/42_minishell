@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:10 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/26 02:46:16 by marvin           ###   ########.fr       */
+/*   Updated: 2026/07/26 03:11:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	builtin_exit(t_shell *shell, char **args)
 {
 	int	status;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
+	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (!args[1])
 		cleanup_and_exit(shell, NULL, -1, shell->last_status);
 	if (!is_numeric(args[1]))
