@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:09:56 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/26 02:42:20 by marvin           ###   ########.fr       */
+/*   Updated: 2026/08/11 03:12:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ static int	traverse(t_ast *ast, int fd_read, int fd_write,
 	if (ast->ast_type == AST_PIPE)
 	{
 		pipe(fd);
-		ctx->fd_arr[ctx->fd_len++] = fd[0];
 		ctx->fd_arr[ctx->fd_len++] = fd[1];
+		ctx->fd_arr[ctx->fd_len++] = fd[0];
 		if (ast->left != NULL)
 			traverse(ast->left, fd_read, fd[1], ctx);
-		if (ast->right != NULL)
-			traverse(ast->right, fd[0], fd_write, ctx);
 		if (fd[1] != STDOUT_FILENO)
 			close(fd[1]);
+		if (ast->right != NULL)
+			traverse(ast->right, fd[0], fd_write, ctx);
 		if (fd[0] != STDIN_FILENO)
 			close(fd[0]);
 	}
@@ -67,6 +67,8 @@ static void	wait_and_collect_result(t_interpreter_context *ctx,
 	while (i < ctx->pid_len)
 	{
 		waitpid(ctx->pid_arr[i], &status, 0);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGPIPE)
+			ft_putstr_fd(" Broken pipe\n", 2);
 		if (ctx->pid_arr[i] == ctx->pid_arr[ctx->pid_len - 1])
 		{
 			if (WIFSIGNALED(status))

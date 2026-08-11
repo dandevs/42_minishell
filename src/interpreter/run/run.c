@@ -39,6 +39,8 @@ int	run_builtin_parent(t_interpreter_context *ctx, t_ast *cmd,
 	return (status);
 }
 
+
+
 void	run_cmd_child(t_ast *cmd, int fd_read, int fd_write,
 		t_interpreter_context *ctx)
 {
@@ -48,7 +50,7 @@ void	run_cmd_child(t_ast *cmd, int fd_read, int fd_write,
 	ctx->pid_arr[ctx->pid_len++] = pid;
 	if (pid == 0)
 	{
-		reset_signals_default();
+		setup_signals_child();
 		setup_child_fds(fd_read, fd_write);
 		if (!process_redirs(cmd, apply_one_redir, apply_one_heredoc))
 			exit(1);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:10 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/26 03:11:58 by marvin           ###   ########.fr       */
+/*   Updated: 2026/08/11 02:48:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	builtin_exit(t_shell *shell, char **args)
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(args[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		cleanup_and_exit(shell, NULL, -1, 255);
+		cleanup_and_exit(shell, NULL, -1, 2);
 	}
 	if (args[2])
 	{
@@ -54,6 +54,8 @@ int	builtin_exit(t_shell *shell, char **args)
 		return (EXIT_FAILURE);
 	}
 	status = (unsigned char)ft_atoi(args[1]);
+	if (status >= 255)
+		status = status % 255;
 	cleanup_and_exit(shell, NULL, -1, status);
 	return (status);
 }

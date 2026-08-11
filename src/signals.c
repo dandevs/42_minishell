@@ -53,7 +53,7 @@ void	setup_signals(t_shell *shell)
 			STDERR_FILENO, 1);
 }
 
-void	reset_signals_default(void)
+void	setup_signals_child(void)
 {
 	struct sigaction	sa;
 
@@ -62,4 +62,5 @@ void	reset_signals_default(void)
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	sigaction(SIGPIPE, &sa, NULL);
 }

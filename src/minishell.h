@@ -117,7 +117,7 @@ typedef int				(*t_heredoc_cb)(char *hd);
 void		setup(int agc, char **agv, char **envp, t_shell *shell);
 int			check_signal(t_shell *shell, int sig);
 void		setup_signals(t_shell *shell);
-void		reset_signals_default(void);
+void		setup_signals_child(void);
 
 char		*get_line(t_shell *shell);
 
