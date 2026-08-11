@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:29:02 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/26 02:44:38 by marvin           ###   ########.fr       */
+/*   Updated: 2026/08/01 17:58:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,6 @@ void	exec_child(t_ast *cmd, t_interpreter_context *ctx)
 	test_access(path);
 	execve(path, cmd->args, ctx->shell->envp);
 	free(path);
-	perror("minishell: ");
-	exit(EX_CMD_NOT_FOUND);
+	//perror("minishell: ");
+	exit(EX_SUCCESS);
 }
