@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:29:02 by danimend          #+#    #+#             */
-/*   Updated: 2026/08/11 02:51:39 by marvin           ###   ########.fr       */
+/*   Updated: 2026/08/11 03:42:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	setup_child_fds(int fd_read, int fd_write)
 	}
 }
 
-void	close_inherited_fds(t_interpreter_context *ctx, int fd_read, int fd_write)
+void	close_inherited_fds(t_interpreter_context *ctx, int fd_read,
+	int fd_write)
 {
 	int	i;
 
@@ -115,6 +116,5 @@ void	exec_child(t_ast *cmd, t_interpreter_context *ctx)
 	test_access(path);
 	execve(path, cmd->args, ctx->shell->envp);
 	free(path);
-	//perror("minishell: ");
 	exit(EX_SUCCESS);
 }

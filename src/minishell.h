@@ -150,6 +150,6 @@ void		print_redirs(t_ast *ast);
 void		print_lst(t_list *lst);
 void		print_args(t_ast *ast);
 
-t_interpreter_result	interpret(t_shell *shell);
+int			interpret(t_shell *shell);
 
 #endif

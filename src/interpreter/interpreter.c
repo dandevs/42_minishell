@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:09:56 by danimend          #+#    #+#             */
-/*   Updated: 2026/08/11 03:12:34 by marvin           ###   ########.fr       */
+/*   Updated: 2026/08/11 03:40:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void	wait_and_collect_result(t_interpreter_context *ctx,
 	}
 }
 
-t_interpreter_result	interpret(t_shell *shell)
+int	interpret(t_shell *shell)
 {
 	t_interpreter_context	context;
 	t_interpreter_result	result;
@@ -95,10 +95,10 @@ t_interpreter_result	interpret(t_shell *shell)
 	context.pid_len = 0;
 	context.fd_len = 0;
 	if (try_builtin_only(shell, &context, &result))
-		return (result);
+		return (result.exit_status);
 	traverse(shell->ast, STDIN_FILENO, STDOUT_FILENO, &context);
 	if (context.pid_len == 0)
-		return (result);
+		return (result.exit_status);
 	wait_and_collect_result(&context, &result);
-	return (result);
+	return (result.exit_status);
 }

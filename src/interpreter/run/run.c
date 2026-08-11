@@ -39,8 +39,6 @@ int	run_builtin_parent(t_interpreter_context *ctx, t_ast *cmd,
 	return (status);
 }
 
-
-
 void	run_cmd_child(t_ast *cmd, int fd_read, int fd_write,
 		t_interpreter_context *ctx)
 {
