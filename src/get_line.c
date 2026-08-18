@@ -25,9 +25,6 @@ char	*get_line(t_shell *shell)
 		free(shell->line);
 		shell->line = NULL;
 	}
-	/* if (!isatty(0))
-	 	line = readline(NULL);
-	 else*/
 	line = readline("minishell :) > ");
 	if (isatty(0) && line && *line && !str_empty(line))
 	{

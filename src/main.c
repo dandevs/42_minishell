@@ -36,8 +36,3 @@ int	main(int agc, char **agv, char **envp)
 		cleanup_loop(&shell);
 	}
 }
-
-/* print_envp(shell.envp);
-		 print_redirs(shell.ast);
-		// print_tokens(&shell);
-		//print_ast(shell.ast);*/

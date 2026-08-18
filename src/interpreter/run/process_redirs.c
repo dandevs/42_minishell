@@ -12,19 +12,6 @@
 
 #include "run.h"
 
-int	apply_one_heredoc(char *hd)
-{
-	int	p[2];
-
-	if (pipe(p) < 0)
-		return (perror("minishell: heredoc"), 0);
-	write(p[1], hd, ft_strlen(hd));
-	close(p[1]);
-	dup2(p[0], STDIN_FILENO);
-	close(p[0]);
-	return (1);
-}
-
 int	apply_one_redir(t_tokens *op, t_tokens *file)
 {
 	int	fd;

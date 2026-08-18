@@ -143,13 +143,6 @@ void		cleanup_ast(t_shell *shell);
 int			mode_change(t_mode *mode, char *word, int i);
 char		*envp_value(char *name, char *last_status, char **envp);
 
-void		print_tokens(t_shell *shell);
-void		print_ast(t_ast *ast);
-void		print_envp(char **envp);
-void		print_redirs(t_ast *ast);
-void		print_lst(t_list *lst);
-void		print_args(t_ast *ast);
-
 int			interpret(t_shell *shell);
 
 #endif

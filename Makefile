@@ -31,7 +31,7 @@ SRC_BUILTINS_FILES = builtins.c builtins_export.c builtins_cd.c builtins_exit.c 
 SRC_BUILTINS = $(foreach F,$(SRC_BUILTINS_FILES),$(SRC_BUILTINS_DIR)$F)
 
 SRC_RUN_DIR = run/
-SRC_RUN_FILES = run.c child_helpers.c path_helpers.c process_redirs.c
+SRC_RUN_FILES = run.c child_helpers.c path_helpers.c process_redirs.c heredoc.c
 SRC_RUN = $(foreach F,$(SRC_RUN_FILES),$(SRC_RUN_DIR)$F)
 
 SRC_INTERPRETOR_DIR = interpreter/
@@ -43,7 +43,7 @@ SRC_ARGS_FILES = build_args.c steps/expand.c steps/tokens_to_lst.c steps/finaliz
 SRC_ARGS = $(foreach F,$(SRC_ARGS_FILES),$(SRC_ARGS_DIR)$F)
 
 SRC_DIR = src/
-SRC_FILES = main.c get_line.c setup.c signals.c test.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR) $(SRC_ARGS)
+SRC_FILES = main.c get_line.c setup.c signals.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR) $(SRC_ARGS)
 SRC = $(foreach F,$(SRC_FILES),$(SRC_DIR)$F)
 
 OBJ = $(SRC:.c=.o)
