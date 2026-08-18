@@ -103,7 +103,7 @@ int	remove_quotes(t_list *node)
 		{
 			if (mode_change(&mode, ((char *)node->content), i))
 				ft_memmove(node->content + i, node->content + i + 1,
-					1 + ft_strlen((char *)node->content + i));
+					ft_strlen((char *)node->content + i));
 			else
 				i++;
 		}

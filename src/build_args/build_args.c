@@ -55,7 +55,7 @@ int	remove_quotes_redirs(t_redirs **redirs)
 			if (mode_change(&mode, redirs[j]->file->lexeme, i))
 				ft_memmove(redirs[j]->file->lexeme + i,
 					redirs[j]->file->lexeme + i + 1,
-					1 + ft_strlen(redirs[j]->file->lexeme + i));
+					ft_strlen(redirs[j]->file->lexeme + i));
 			else
 				i++;
 		}
