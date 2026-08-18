@@ -81,6 +81,7 @@ void	setup(int agc, char **agv, char **envp, t_shell *shell)
 	shell->ast = NULL;
 	shell->envp = setup_envp(envp);
 	shell->last_status = 0;
+	shell->should_exit = 0;
 	shell->line = NULL;
 	shell->tokens = NULL;
 	if (!shell->envp || !shell->envp[0])

@@ -94,6 +94,7 @@ typedef struct s_shell
 	t_tokens	*tokens;
 	t_ast		*ast;
 	int			last_status;
+	int			should_exit;
 	char		*last_line;
 }	t_shell;
 

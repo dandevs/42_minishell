@@ -34,5 +34,7 @@ int	main(int agc, char **agv, char **envp)
 		}
 		shell.last_status = interpret(&shell);
 		cleanup_loop(&shell);
+		if (shell.should_exit)
+			cleanup_and_exit(&shell, NULL, -1, shell.last_status);
 	}
 }

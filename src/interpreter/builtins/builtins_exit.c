@@ -40,13 +40,13 @@ int	builtin_exit(t_shell *shell, char **args)
 
 	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (!args[1])
-		cleanup_and_exit(shell, NULL, -1, shell->last_status);
+		return (shell->should_exit = 1, shell->last_status);
 	if (!is_numeric(args[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(args[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		cleanup_and_exit(shell, NULL, -1, 2);
+		return (shell->should_exit = 1, 2);
 	}
 	if (args[2])
 	{
@@ -56,6 +56,5 @@ int	builtin_exit(t_shell *shell, char **args)
 	status = (unsigned char)ft_atoi(args[1]);
 	if (status >= 255)
 		status = status % 255;
-	cleanup_and_exit(shell, NULL, -1, status);
-	return (status);
+	return (shell->should_exit = 1, status);
 }

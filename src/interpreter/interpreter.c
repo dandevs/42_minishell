@@ -12,6 +12,20 @@
 
 #include "interpreter.h"
 
+static void	close_and_untrack(t_interpreter_context *ctx, int fd)
+{
+	int	i;
+
+	close(fd);
+	i = 0;
+	while (i < ctx->fd_len)
+	{
+		if (ctx->fd_arr[i] == fd)
+			ctx->fd_arr[i] = -1;
+		i++;
+	}
+}
+
 static int	traverse(t_ast *ast, int fd_read, int fd_write,
 				t_interpreter_context *ctx)
 {
@@ -25,11 +39,11 @@ static int	traverse(t_ast *ast, int fd_read, int fd_write,
 		if (ast->left != NULL)
 			traverse(ast->left, fd_read, fd[1], ctx);
 		if (fd[1] != STDOUT_FILENO)
-			close(fd[1]);
+			close_and_untrack(ctx, fd[1]);
 		if (ast->right != NULL)
 			traverse(ast->right, fd[0], fd_write, ctx);
 		if (fd[0] != STDIN_FILENO)
-			close(fd[0]);
+			close_and_untrack(ctx, fd[0]);
 	}
 	else if (ast->ast_type == AST_CMD)
 	{
