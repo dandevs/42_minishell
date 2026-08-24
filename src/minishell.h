@@ -118,12 +118,15 @@ typedef int				(*t_heredoc_cb)(char *hd);
 void		setup(int agc, char **agv, char **envp, t_shell *shell);
 int			check_signal(t_shell *shell, int sig);
 void		setup_signals(t_shell *shell);
+void		setup_signals_hd(void);
+void		restore_signals(void);
 void		setup_signals_child(void);
 
 char		*get_line(t_shell *shell);
 
 int			parse(t_shell *shell);
 
+int			hd_collect_body(t_redirs *redirs);
 int			resolve_hd_recursive(t_ast *ast);
 
 int			build_args_recursive(t_ast *ast, int last_status, char **envp);

@@ -55,31 +55,20 @@ int	get_hd_delimiter(t_redirs *redirs)
 
 int	get_hd_body(t_redirs *redirs)
 {
-	char	*line;
-	char	*tmp;
+	int	r;
 
 	redirs->hd = ft_strdup("");
 	if (!redirs->hd)
 		return (0);
-	line = readline("> ");
-	while (line && ft_strcmp(line, redirs->delimiter) != 0)
+	setup_signals_hd();
+	r = hd_collect_body(redirs);
+	if (r < 0)
 	{
-		tmp = ft_strjoin(redirs->hd, line);
-		free(line);
-		if (!tmp)
-			return (0);
 		free(redirs->hd);
-		redirs->hd = ft_strjoin(tmp, "\n");
-		free(tmp);
-		if (!redirs->hd)
-			return (0);
-		line = readline("> ");
+		redirs->hd = NULL;
 	}
-	if (!line)
-		ft_putstr_fd("minishell: warning: heredoc delimited by EOF\n", 2);
-	else
-		free(line);
-	return (1);
+	restore_signals();
+	return (r >= 0);
 }
 
 int	resolve_hd_recursive(t_ast *ast)

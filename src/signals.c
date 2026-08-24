@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/26 20:04:51 by marvin            #+#    #+#             */
-/*   Updated: 2026/04/26 20:04:51 by marvin           ###   ########.fr       */
+/*   Created: 2026/08/24 14:36:06 by danimend          #+#    #+#             */
+/*   Updated: 2026/08/24 14:36:18 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,40 +34,35 @@ void	handle_signals(int sig)
 	}
 }
 
-	/*sigaddset(&mask, SIGQUIT);
-	sigaddset(&mask, SIGTERM)*/
-
-void	setup_signals(t_shell *shell)
+static int	install_interactive_handlers(void)
 {
 	struct sigaction	sa;
 	sigset_t			mask;
 
-	g_signal = 0;
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGINT);
 	sa.sa_mask = mask;
 	sa.sa_flags = SA_RESTART;
 	sa.sa_handler = handle_signals;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
-		cleanup_and_exit(shell, "failed to define critical signals\n",
-			STDERR_FILENO, 1);
+		return (0);
 	sa.sa_handler = SIG_IGN;
 	if (sigaction(SIGPIPE, &sa, NULL) == -1)
-		cleanup_and_exit(shell, "failed to define critical signals\n",
-			STDERR_FILENO, 1);
+		return (0);
 	if (sigaction(SIGQUIT, &sa, NULL) == -1)
+		return (0);
+	return (1);
+}
+
+void	setup_signals(t_shell *shell)
+{
+	g_signal = 0;
+	if (!install_interactive_handlers())
 		cleanup_and_exit(shell, "failed to define critical signals\n",
 			STDERR_FILENO, 1);
 }
 
-void	setup_signals_child(void)
+void	restore_signals(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = SIG_DFL;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-	sigaction(SIGPIPE, &sa, NULL);
+	install_interactive_handlers();
 }

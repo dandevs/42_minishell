@@ -43,7 +43,7 @@ SRC_ARGS_FILES = build_args.c steps/expand.c steps/tokens_to_lst.c steps/finaliz
 SRC_ARGS = $(foreach F,$(SRC_ARGS_FILES),$(SRC_ARGS_DIR)$F)
 
 SRC_DIR = src/
-SRC_FILES = main.c get_line.c setup.c signals.c utils.c resolve_hd.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR) $(SRC_ARGS)
+SRC_FILES = main.c get_line.c setup.c signals.c signals_hd.c utils.c resolve_hd.c hd_read.c $(SRC_PARSE) $(SRC_CLEANUP) $(SRC_INTERPRETOR) $(SRC_ARGS)
 SRC = $(foreach F,$(SRC_FILES),$(SRC_DIR)$F)
 
 OBJ = $(SRC:.c=.o)
