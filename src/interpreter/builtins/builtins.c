@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:21 by danimend          #+#    #+#             */
-/*   Updated: 2026/07/26 02:49:05 by marvin           ###   ########.fr       */
+/*   Updated: 2026/08/24 17:12:42 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	builtin_pwd(t_shell *shell, char **args)
 	{
 		ft_putstr_fd("minishell: pwd: ", 2);
 		ft_putstr_fd(args[1], 2);
-		ft_putstr_fd(": invalid option", 2);
+		ft_putstr_fd(": invalid option\n", 2);
 		return (EX_MISUSE);
 	}
 	if (!getcwd(cwd, sizeof(cwd)))
