@@ -71,7 +71,7 @@ t_tokens	*tokens_values(t_tokens *last, char *line, int i)
 {
 	t_tokens	*tokens;
 
-	tokens = calloc(1, sizeof(t_tokens));
+	tokens = ft_calloc(1, sizeof(t_tokens));
 	if (!tokens)
 		return (NULL);
 	tokens->litteral = NULL;
