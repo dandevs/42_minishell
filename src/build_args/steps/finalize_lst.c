@@ -27,7 +27,7 @@ int	new_arg(t_list *node, char *content, int i)
 		return (free(new), 0);
 	new->next = node->next;
 	node->next = new;
-	trimmed_content = realloc(node->content, sizeof(char) * i + 1);
+	trimmed_content = ft_realloc(node->content, i + 1, sizeof(char));
 	if (!trimmed_content)
 		return (0);
 	node->content = (void *)trimmed_content;

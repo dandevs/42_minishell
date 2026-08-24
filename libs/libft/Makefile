@@ -20,7 +20,7 @@ ft_lstiter_bonus.c ft_lstmap_bonus.c
 SRC_LST = $(foreach F,$(SRC_LST_FILES),$(SRC_LST_DIR)$F)
 
 SRC_MEM_DIR = mem/
-SRC_MEM_FILES = ft_calloc.c ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memmove.c \
+SRC_MEM_FILES = ft_calloc.c ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_realloc.c\
 ft_memset.c ft_bzero.c
 SRC_MEM = $(foreach F,$(SRC_MEM_FILES),$(SRC_MEM_DIR)$F)
 
