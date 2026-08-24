@@ -24,6 +24,7 @@ int	main(int agc, char **agv, char **envp)
 		shell.line = get_line(&shell);
 		if (!shell.line)
 			cleanup_and_exit(&shell, "exit\n", STDOUT_FILENO, 0);
+		check_signal(&shell, 0);
 		if (str_empty(shell.line))
 			continue ;
 		if (!parse(&shell) || !resolve_hd_recursive(shell.ast)

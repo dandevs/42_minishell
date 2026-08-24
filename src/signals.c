@@ -51,6 +51,13 @@ void	setup_signals(t_shell *shell)
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		cleanup_and_exit(shell, "failed to define critical signals\n",
 			STDERR_FILENO, 1);
+	sa.sa_handler = SIG_IGN;
+	if (sigaction(SIGPIPE, &sa, NULL) == -1)
+		cleanup_and_exit(shell, "failed to define critical signals\n",
+			STDERR_FILENO, 1);
+	if (sigaction(SIGQUIT, &sa, NULL) == -1)
+		cleanup_and_exit(shell, "failed to define critical signals\n",
+			STDERR_FILENO, 1);
 }
 
 void	setup_signals_child(void)
