@@ -76,7 +76,7 @@ void	setup(int agc, char **agv, char **envp, t_shell *shell)
 	(void)agc;
 	(void)agv;
 	if (agc != 1 || !envp || !*envp)
-		cleanup_and_exit(shell, "incorrect args", 2, 3);
+		cleanup_and_exit(NULL, "incorrect args\n", 2, 3);
 	shell->last_line = NULL;
 	shell->ast = NULL;
 	shell->envp = setup_envp(envp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mathvall <mathvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 01:33:10 by mat               #+#    #+#             */
-/*   Updated: 2026/07/26 04:39:58 by marvin           ###   ########.fr       */
+/*   Updated: 2026/09/04 16:40:03 by mathvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ int	ambiguous_redirect(t_redirs **redirs)
 		mode = NORMAL;
 		j = 0;
 		if (redirs[i]->file && !redirs[i]->file->lexeme[j])
-			return (ft_printf("ambiguous redirect\n"), 1);
+			return (ft_putendl_fd("ambiguous redirect", STDERR_FILENO), 1);
 		while (redirs[i]->file && redirs[i]->file->lexeme[j])
 		{
 			mode_change(&mode, redirs[i]->file->lexeme, j);
 			if (mode == NORMAL && ft_isspace(redirs[i]->file->lexeme[j]))
-				return (ft_printf("ambiguous redirect\n"), 1);
+				return (ft_putendl_fd("ambiguous redirect", STDERR_FILENO), 1);
 			j++;
 		}
 		i++;
