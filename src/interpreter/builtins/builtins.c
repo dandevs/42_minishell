@@ -6,7 +6,7 @@
 /*   By: danimend <danimend@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 17:40:21 by danimend          #+#    #+#             */
-/*   Updated: 2026/08/24 17:12:42 by danimend         ###   ########.fr       */
+/*   Updated: 2026/09/04 16:58:07 by danimend         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	builtin_echo(t_shell *shell, char **args)
 
 static int	builtin_pwd(t_shell *shell, char **args)
 {
-	char	cwd[4096];
+	char	cwd[16384];
 
 	(void)shell;
 	(void)args;
@@ -69,7 +69,7 @@ static int	builtin_pwd(t_shell *shell, char **args)
 	if (!getcwd(cwd, sizeof(cwd)))
 	{
 		perror("minishell: pwd");
-		return (EXIT_FAILURE);
+		return (EX_MISUSE);
 	}
 	ft_putendl_fd(cwd, STDOUT_FILENO);
 	return (EXIT_SUCCESS);
