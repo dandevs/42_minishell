@@ -2,10 +2,9 @@ NAME = minishell
 TEST = test
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -g
-HEADER = include/ libs/libft libs/ft_printf $(DIRS)
-ARC_PRINTF = libs/ft_printf/libftprintf.a -lreadline
+HEADER = include/ libs/libft $(DIRS)
 ARC_LIBFT = libs/libft/libft.a
-ARC = $(ARC_PRINTF) $(ARC_LIBFT)
+ARC = $(ARC_LIBFT) -lreadline
 INCLUDE = $(foreach H,$(HEADER),-I $H)
 
 DIRS = $(dir $(SRC))
@@ -50,7 +49,7 @@ OBJ = $(SRC:.c=.o)
 
 all : $(NAME)
 
-$(NAME) : $(OBJ) $(ARC_LIBFT) $(ARC_PRINTF)
+$(NAME) : $(OBJ) $(ARC_LIBFT)
 	$(CC) $(CFLAGS) $(INCLUDE) $(OBJ) $(ARC) -o $(NAME)
 
 %.o: %.c
@@ -67,9 +66,6 @@ fclean : clean
 	rm -f $(NAME)
 
 re : fclean all
-
-$(ARC_PRINTF) :
-	make -C libs/ft_printf/
 
 $(ARC_LIBFT) :
 	make -C libs/libft/

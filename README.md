@@ -18,8 +18,6 @@ The minishell program has the goal to reproduce the behaviour of the shell, whic
 
 The "real" shell does not follow these steps in this exact order, and also provides additionnal features that we will not be covering, such as unique tokens for certain symbols (examples : ";", "||", "&&" etc...) associated with extra steps.
 
-# Tokenization
-
 ## 1. Getting the line / getting the instruction
 
 We get the line that we will be analysing and executing if possible, by using the function readline. It can cause leaks that we don't treat a special way. We also build a history by using add_history if : our line is different from the previous one, and we are not receiving the line from a pipe or redirection (giving a line at minishell's launch).
@@ -58,7 +56,7 @@ A heredoc (<< EOF) is the only redirection whose content does not exist anywhere
 For each one found:
 
 Get the delimiter (hd_delimiter) : the word following <<. Whether it was quoted or not is recorded, because it decides if the body will be expanded later - *<< EOF* expands $VAR inside the body, *<< "EOF"* does not. The quotes will then be removed from the delimiter itself, since we compare against the bare word.
-Get the body (hd_body) : we prompt the user line by line until a line matches the delimiter exactly, and store the accumulated content directly in the hd_body field of the redirection node.
+Get the body (hd_body) : we prompt the user line by line until a line matches the delimiter exactly, and store the accumulated content directly in the hd_body field of the redirection node. We will detail more and explain the execution of this step in paragraph 5 of this document.
 
 File field of redirection is set to NULL. This redirection node no longer designates something to open, the input is registered in the tree, and the executor will "feed" it to the command instead of calling open.
 
@@ -76,23 +74,23 @@ Expansion: $VAR and $? are replaced by their values. We then study our context /
 
 Any failure aborts the whole traversal and the command is not executed. We go back to step 1, and eventually write the error on file descriptor number 2.
 
-# Runtime (Interpreter)
+## 5. Runtime (Interpreter)
 
-## Core
+### Core
 
 The interpreter checks what kind of node we are, a command? Run it! Is it a "|" pipe token? Then we create two new fd's with the pipe() function, and use recursion to traverse the tree, passing down information such as which fd's to use, we modify a "context" struct holding more information, such as the shell instance itself, the ENV, and so forth.
 
 By running each command, we fill up the context, we know which PID's are running, which fd's are available, the final step is to waitpid() each running pid created by execve(). While waiting, we have updated signals so that we are able to catch it at that PID level (instead of letting it bubble into the actual minishell, crashing minishell itself), from there we are able to tell if it was a crash, a broken pipe, and so forth, and print the correct message.
 
-## Heredocs
+### Heredocs
 
 Heredoc tokens are already created from the tokenization/parser stage. The interpreter essentially just catches signals, eg SIGINT for when the user hits ctrl+c and exits. Heredoc uses a file based fd so that the input stream can be any size, otherwise using a pipe() would incur a 64kb maximum size.
 
-## Redirections
+### Redirections
 
 The redirections also relatively simple, as the tokenizer has done most of the work and presents us with information, we just iterate through the list of redirections on the line, operations based on the token.
 
-## Running commands
+### Running commands
 
 On running commands, we check name first and see if any builtins are hit. If not, we continue on traverse() and using an execve + use the context for ENV. We search through all of our paths to find the correct file, then spawn it in a new child, setting up the correct signals as to override and not crash the parent, and as well listen to when events occur.
 

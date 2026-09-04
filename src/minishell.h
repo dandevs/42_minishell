@@ -20,7 +20,6 @@
 # include <readline/history.h>
 # include <signal.h>
 # include "libft.h"
-# include "ft_printf.h"
 # define EX_SUCCESS 0
 # define EX_MISUSE 2
 # define EX_CANT_EXECUTE 126
