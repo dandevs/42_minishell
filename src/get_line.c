@@ -25,7 +25,10 @@ char	*get_line(t_shell *shell)
 		free(shell->line);
 		shell->line = NULL;
 	}
-	line = readline("minishell :) > ");
+	if (isatty(0))
+		line = readline("minishell :) > ");
+	else
+		line = readline("");
 	if (isatty(0) && line && *line && !str_empty(line))
 	{
 		if ((shell->last_line && ft_strcmp(line, shell->last_line) != 0)
